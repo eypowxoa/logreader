@@ -45,9 +45,21 @@
             "composer validate --no-interaction --strict",
             "composer normalize --dry-run --no-interaction",
             "composer exec composer-dependency-analyser",
-            "composer exec php-cs-fixer -- check --config configs/php-cs-fixer.php --verbose",
+            "composer cs",
+            "composer stan",
+            "composer test"
+        ],
+        "cs": [
+            "composer exec php-cs-fixer -- check --config configs/php-cs-fixer.php --verbose"
+        ],
+        "fix": [
+            "composer exec php-cs-fixer -- fix --config configs/php-cs-fixer.php --verbose"
+        ],
+        "stan": [
             "composer exec phpstan -- analyze --configuration configs/phpstan.neon",
-            "composer exec rector -- --config configs/rector.php --dry-run",
+            "composer exec rector -- --config configs/rector.php --dry-run"
+        ],
+        "test": [
             "composer exec phpunit -- --configuration configs/phpunit.xml"
         ]
     }
