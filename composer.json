@@ -1,0 +1,54 @@
+{
+    "name": "logparser/logparser",
+    "description": "Universal web server log parser.",
+    "license": "MIT",
+    "require": {
+        "php": "^8.5"
+    },
+    "require-dev": {
+        "ext-ast": "*",
+        "ext-ctype": "*",
+        "ext-mbstring": "*",
+        "ext-pcntl": "*",
+        "ext-pcov": "*",
+        "captainhook/captainhook-phar": "^5.27",
+        "ergebnis/composer-normalize": "^2.49",
+        "friendsofphp/php-cs-fixer": "^3.93",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "phpunit/phpunit": "^12.5",
+        "rector/rector": "^2.3",
+        "roave/security-advisories": "dev-latest",
+        "shipmonk/composer-dependency-analyser": "^1.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "LogParser\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LogParserTests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "captainhook/captainhook-phar": true,
+            "cweagans/composer-patches": true,
+            "ergebnis/composer-normalize": true
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "checklist": [
+            "composer check-platform-reqs",
+            "composer validate --no-interaction --strict",
+            "composer normalize --dry-run --no-interaction",
+            "composer exec composer-dependency-analyser",
+            "composer exec php-cs-fixer -- check --config configs/php-cs-fixer.php --verbose",
+            "composer exec phpstan -- analyze --configuration configs/phpstan.neon",
+            "composer exec rector -- --config configs/rector.php --dry-run",
+            "composer exec phpunit -- --configuration configs/phpunit.xml"
+        ]
+    }
+}

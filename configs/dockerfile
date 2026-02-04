@@ -1,0 +1,7 @@
+FROM php:8.5-cli-alpine
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions @composer
+RUN install-php-extensions ast ctype mbstring pcntl pcov
+ENV COMPOSER_ROOT_VERSION=0.0.1
+WORKDIR /app
+COPY --parents configs src tests vendor composer.json composer.lock ./

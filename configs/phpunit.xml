@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    beStrictAboutChangesToGlobalState="true"
+    beStrictAboutCoverageMetadata="true"
+    beStrictAboutOutputDuringTests="true"
+    beStrictAboutTestsThatDoNotTestAnything="true"
+    bootstrap="../vendor/autoload.php"
+    cacheDirectory="../.cache/phpunit"
+    defaultTimeLimit="1"
+    displayDetailsOnPhpunitDeprecations="true"
+    enforceTimeLimit="true"
+    executionOrder="depends,defects"
+    failOnDeprecation="true"
+    failOnNotice="true"
+    failOnPhpunitDeprecation="true"
+    failOnRisky="true"
+    failOnWarning="true"
+    requireCoverageMetadata="false"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+>
+    <coverage
+        includeUncoveredFiles="false"
+        ignoreDeprecatedCodeUnits="false"
+        pathCoverage="false"
+    >
+        <report>
+            <html outputDirectory="../.cache/phpuint.coverage" />
+            <text outputFile="../.cache/phpunit.coverage.txt" />
+        </report>
+    </coverage>
+    <source
+        ignoreIndirectDeprecations="true"
+        restrictNotices="true"
+        restrictWarnings="true"
+    >
+        <include>
+            <directory>../src</directory>
+        </include>
+    </source>
+    <testsuites>
+        <testsuite name="default">
+            <directory>../tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
