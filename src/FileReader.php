@@ -11,7 +11,7 @@ final class FileReader
     /** @var null|resource */
     private $handle;
 
-    public function __construct(public readonly string $file) {}
+    public function __construct(public readonly string $path) {}
 
     public function __destruct()
     {
@@ -40,7 +40,7 @@ final class FileReader
         $read = @fread($handle, $length);
 
         if (false === $read) {
-            throw new FileNotReadableException($this->file);
+            throw new FileNotReadableException($this->path);
         }
 
         ++$this->readCounter;
@@ -63,7 +63,7 @@ final class FileReader
         $seeked = @fseek($handle, $position);
 
         if (0 !== $seeked) {
-            throw new FileNotSeekableException($this->file);
+            throw new FileNotSeekableException($this->path);
         }
     }
 
@@ -74,14 +74,14 @@ final class FileReader
     #[\NoDiscard()]
     public function size(): int
     {
-        $size = @filesize($this->file);
+        $size = @filesize($this->path);
 
         if (false === $size) {
-            if (file_exists($this->file)) {
-                throw new FileNotReadableException($this->file);
+            if (file_exists($this->path)) {
+                throw new FileNotReadableException($this->path);
             }
 
-            throw new FileNotExistsException($this->file);
+            throw new FileNotExistsException($this->path);
         }
 
         return $size;
@@ -100,10 +100,10 @@ final class FileReader
             return $handle;
         }
 
-        $handle = @fopen($this->file, 'r');
+        $handle = @fopen($this->path, 'r');
 
         if (false === $handle) {
-            throw new FileNotExistsException($this->file);
+            throw new FileNotExistsException($this->path);
         }
 
         $this->handle = $handle;

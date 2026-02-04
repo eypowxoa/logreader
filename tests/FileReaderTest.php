@@ -18,7 +18,7 @@ final class FileReaderTest extends TestCase
     public function testConstructShouldSavePath(): void
     {
         $fileReader = new FileReader(__FILE__);
-        $this->assertSame(__FILE__, $fileReader->file);
+        $this->assertSame(__FILE__, $fileReader->path);
     }
 
     public function testReadCounterShouldBeZeroAtStart(): void
