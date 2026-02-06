@@ -20,6 +20,8 @@ final class DateReader
 
     private const string KEY_YEAR = 'year';
 
+    private const string UTF_8 = 'UTF-8';
+
     public string $buffer = '';
 
     public private(set) ?\DateTimeImmutable $date = null;
@@ -104,12 +106,12 @@ final class DateReader
             $error = $dateWrongException;
         }
 
-        $normalized = mb_strtoupper($value, 'UTF-8');
+        $normalized = mb_strtoupper($value, self::UTF_8);
 
         $monthNameList = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
         foreach ($monthNameList as $index => $name) {
-            if (false !== mb_strpos($normalized, $name, 0, 'UTF-8')) {
+            if (false !== mb_strpos($normalized, $name, 0, self::UTF_8)) {
                 return $index + 1;
             }
         }
