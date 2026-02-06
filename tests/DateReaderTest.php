@@ -25,7 +25,7 @@ final class DateReaderTest extends TestCase
             $expectedDate = null;
         }
 
-        $dateReader->read($offset);
+        $dateReader->readDate($offset);
         $this->assertSame($expectedDate, $dateReader->date?->format('Y-m-d H:i:s.u'));
         $this->assertSame($expectedOffset, $dateReader->offset);
     }

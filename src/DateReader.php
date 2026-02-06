@@ -28,7 +28,7 @@ final class DateReader
 
     public function __construct(private readonly string $pattern) {}
 
-    public function read(int $offset): void
+    public function readDate(int $offset): void
     {
         $this->date = null;
         $this->offset = $offset;
