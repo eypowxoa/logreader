@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LogParserTests;
 
-use LogParser\FileNotExistsException;
 use LogParser\FileNotReadableException;
 use LogParser\FileNotSeekableException;
 use LogParser\FileReader;
@@ -51,7 +50,7 @@ final class FileReaderTest extends TestCase
     public function testReadShouldFailIfNotExists(): void
     {
         $fileReader = new FileReader(__FILE__ . '.worng');
-        $this->expectException(FileNotExistsException::class);
+        $this->expectException(FileNotReadableException::class);
         $this->assertNotEmpty($fileReader->read(1));
     }
 
@@ -129,14 +128,14 @@ final class FileReaderTest extends TestCase
     public function testSizeShouldFailIfNotExists(): void
     {
         $fileReader = new FileReader(__FILE__ . '.wrong');
-        $this->expectException(FileNotExistsException::class);
+        $this->expectException(FileNotReadableException::class);
         $this->assertNotEmpty($fileReader->size());
     }
 
     public function testSizeShouldFailIfNotReadable(): void
     {
         $fileReader = new FileReader('php://stdout');
-        $this->expectException(FileNotExistsException::class);
+        $this->expectException(FileNotReadableException::class);
         $this->assertNotEmpty($fileReader->size());
     }
 

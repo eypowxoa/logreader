@@ -25,7 +25,6 @@ final class FileReader
     }
 
     /**
-     * @throws FileNotExistsException
      * @throws FileNotReadableException
      */
     #[\NoDiscard()]
@@ -49,7 +48,7 @@ final class FileReader
     }
 
     /**
-     * @throws FileNotExistsException
+     * @throws FileNotReadableException
      * @throws FileNotSeekableException
      */
     public function seek(int $position): void
@@ -68,7 +67,6 @@ final class FileReader
     }
 
     /**
-     * @throws FileNotExistsException
      * @throws FileNotReadableException
      */
     #[\NoDiscard()]
@@ -77,11 +75,7 @@ final class FileReader
         $size = @filesize($this->path);
 
         if (false === $size) {
-            if (file_exists($this->path)) {
-                throw new FileNotReadableException($this->path);
-            }
-
-            throw new FileNotExistsException($this->path);
+            throw new FileNotReadableException($this->path);
         }
 
         return $size;
@@ -90,7 +84,7 @@ final class FileReader
     /**
      * @return resource
      *
-     * @throws FileNotExistsException
+     * @throws FileNotReadableException
      */
     private function open()
     {
@@ -103,7 +97,7 @@ final class FileReader
         $handle = @fopen($this->path, 'r');
 
         if (false === $handle) {
-            throw new FileNotExistsException($this->path);
+            throw new FileNotReadableException($this->path);
         }
 
         $this->handle = $handle;
