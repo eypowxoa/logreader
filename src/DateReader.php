@@ -37,7 +37,7 @@ final class DateReader
             throw new \InvalidArgumentException(\sprintf('Bad offset %d, expected integer from 0 to %d', $offset, PHP_INT_MAX));
         }
 
-        /** @var array<int|string,array{0:string,1:int}> $match */
+        /** @var array<int|string,array{string,int}> $match */
         $match = [];
 
         $pattern = $this->pattern . 'Anu';

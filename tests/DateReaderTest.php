@@ -31,7 +31,7 @@ final class DateReaderTest extends TestCase
     }
 
     /**
-     * @return iterable<string,array{0:string,1:string,2:int,3:null|string|\Throwable,4:int}>
+     * @return iterable<string,array{string,string,int,null|string|\Throwable,int}>
      */
     public static function provideReadCases(): iterable
     {
