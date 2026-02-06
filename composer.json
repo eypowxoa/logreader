@@ -3,12 +3,13 @@
     "description": "Universal web server log parser.",
     "license": "MIT",
     "require": {
-        "php": "^8.5"
+        "php": "^8.5",
+        "ext-filter": "*",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "ext-ast": "*",
         "ext-ctype": "*",
-        "ext-mbstring": "*",
         "ext-pcntl": "*",
         "ext-pcov": "*",
         "captainhook/captainhook-phar": "^5.27",
