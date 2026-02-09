@@ -84,6 +84,23 @@ final class FileReader
     }
 
     /**
+     * @throws FileNotReadableException
+     */
+    #[\NoDiscard()]
+    public function tell(): int
+    {
+        $handle = $this->open();
+
+        $position = @ftell($handle);
+
+        if (!\is_int($position)) {
+            throw new FileNotReadableException($this->path);
+        }
+
+        return $position;
+    }
+
+    /**
      * @return resource
      *
      * @throws FileNotReadableException

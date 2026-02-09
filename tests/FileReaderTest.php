@@ -144,4 +144,26 @@ final class FileReaderTest extends TestCase
         $fileReader = new FileReader(__FILE__);
         $this->assertSame(filesize(__FILE__), $fileReader->size());
     }
+
+    public function testTellShouldFailIfFileNotExists(): void
+    {
+        $fileReader = new FileReader(__FILE__ . '.wrong');
+        $this->expectException(FileNotReadableException::class);
+        $this->assertNotEmpty($fileReader->tell());
+    }
+
+    public function testTellShouldFailIfFileNotReadable(): void
+    {
+        $fileReader = new FileReader('php://stdout');
+        $this->expectException(FileNotReadableException::class);
+        $this->assertNotEmpty($fileReader->tell());
+    }
+
+    public function testTellShouldReturnPosition(): void
+    {
+        $fileReader = new FileReader(__FILE__);
+        $this->assertSame(0, $fileReader->tell());
+        $this->assertNotEmpty($fileReader->read(10_000));
+        $this->assertSame(filesize(__FILE__), $fileReader->tell());
+    }
 }
