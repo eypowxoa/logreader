@@ -25,6 +25,7 @@ final class FileReader
     }
 
     /**
+     * @throws \InvalidArgumentException
      * @throws FileNotReadableException
      */
     #[\NoDiscard()]
@@ -48,6 +49,7 @@ final class FileReader
     }
 
     /**
+     * @throws \InvalidArgumentException
      * @throws FileNotReadableException
      * @throws FileNotSeekableException
      */

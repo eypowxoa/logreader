@@ -30,6 +30,10 @@ final class DateReader
 
     public function __construct(private readonly string $pattern) {}
 
+    /**
+     * @throws \InvalidArgumentException
+     * @throws DateWrongException
+     */
     public function readDate(int $offset): void
     {
         $this->date = null;
@@ -75,6 +79,9 @@ final class DateReader
         $this->offset += mb_strlen($match[0][0], '8bit');
     }
 
+    /**
+     * @throws DateWrongException
+     */
     private function validateInt(?string $value, string $period, int $minimum, int $maximum, int $offset): ?int
     {
         if (null === $value) {
@@ -94,6 +101,9 @@ final class DateReader
         return $result;
     }
 
+    /**
+     * @throws DateWrongException
+     */
     private function validateMonth(?string $value, int $offset): ?int
     {
         if (null === $value) {

@@ -23,6 +23,9 @@ final class RecordReader
         $this->dateReader = new DateReader($datePattern);
     }
 
+    /**
+     * @throws RecordWrongException
+     */
     public function readRecord(): ?Record
     {
         $this->dateReader->buffer = $this->buffer;
