@@ -10,13 +10,13 @@ final class RecordReader
 
     private const string NEW_LINE = "\n";
 
-    public string $buffer = '';
-
     public int $offset = 0;
 
-    public int $position = 0;
+    private string $buffer = '';
 
     private readonly DateReader $dateReader;
+
+    private int $position = 0;
 
     public function __construct(string $datePattern)
     {
@@ -76,5 +76,12 @@ final class RecordReader
         }
 
         return null;
+    }
+
+    public function setBuffer(string $buffer, int $position = 0): void
+    {
+        $this->buffer = $buffer;
+        $this->offset = 0;
+        $this->position = $position;
     }
 }

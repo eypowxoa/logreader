@@ -22,9 +22,8 @@ final class RecordReaderTest extends TestCase
     public function testReadRecord(string $buffer, int $offset, int $position, array $expected): void
     {
         $recordReader = new RecordReader('~(?<day>[\dx]+)~');
-        $recordReader->buffer = $buffer;
+        $recordReader->setBuffer($buffer, $position);
         $recordReader->offset = $offset;
-        $recordReader->position = $position;
 
         if (\is_string($expected[0][1])) {
             $this->expectExceptionObject(new RecordWrongException($expected[0][1]));
