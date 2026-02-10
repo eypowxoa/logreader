@@ -31,7 +31,6 @@ final class DateReader
     public function __construct(private readonly string $pattern) {}
 
     /**
-     * @throws \InvalidArgumentException
      * @throws DateWrongException
      */
     public function readDate(int $offset): void

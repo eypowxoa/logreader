@@ -25,7 +25,6 @@ final class FileReader
     }
 
     /**
-     * @throws \InvalidArgumentException
      * @throws FileNotReadableException
      */
     #[\NoDiscard()]
@@ -49,7 +48,6 @@ final class FileReader
     }
 
     /**
-     * @throws \InvalidArgumentException
      * @throws FileNotReadableException
      */
     public function seek(int $position): void
