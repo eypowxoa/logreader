@@ -14,6 +14,8 @@ final class RecordReader
 
     private string $buffer = '';
 
+    private bool $complete = false;
+
     private readonly DateReader $dateReader;
 
     private int $position = 0;
@@ -63,7 +65,11 @@ final class RecordReader
             $newLinePosition = mb_strpos($this->buffer, self::NEW_LINE, $offset, self::BYTE_ENCODING);
 
             if (false === $newLinePosition) {
-                $recordDate = null;
+                if ($this->complete) {
+                    $this->offset = mb_strlen($this->buffer, self::BYTE_ENCODING);
+                } else {
+                    $recordDate = null;
+                }
 
                 break;
             }
@@ -81,9 +87,10 @@ final class RecordReader
         return null;
     }
 
-    public function setBuffer(string $buffer, int $position = 0): void
+    public function setBuffer(string $buffer, bool $complete = false, int $position = 0): void
     {
         $this->buffer = $buffer;
+        $this->complete = $complete;
         $this->offset = 0;
         $this->position = $position;
     }
