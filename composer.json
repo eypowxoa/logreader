@@ -58,7 +58,7 @@
             "composer exec php-cs-fixer -- fix --config configs/php-cs-fixer.php --verbose"
         ],
         "stan": [
-            "composer exec phpstan -- analyze --configuration configs/phpstan.neon",
+            "composer exec phpstan -- analyze --configuration configs/phpstan.neon --memory-limit 256M",
             "composer exec rector -- --config configs/rector.php --dry-run"
         ],
         "test": [
