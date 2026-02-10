@@ -26,6 +26,7 @@ final class RecordReader
     /**
      * @throws RecordWrongException
      */
+    #[\NoDiscard()]
     public function readRecord(): ?Record
     {
         $this->dateReader->buffer = $this->buffer;
