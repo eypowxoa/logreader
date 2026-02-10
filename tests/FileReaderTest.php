@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LogParserTests;
 
 use LogParser\FileNotReadableException;
-use LogParser\FileNotSeekableException;
 use LogParser\FileReader;
 use PHPUnit\Framework\TestCase;
 
@@ -106,7 +105,7 @@ final class FileReaderTest extends TestCase
     public function testSeekShouldFailIfNotSeekable(): void
     {
         $fileReader = new FileReader('php://stdout');
-        $this->expectException(FileNotSeekableException::class);
+        $this->expectException(FileNotReadableException::class);
         $fileReader->seek(0);
     }
 

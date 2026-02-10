@@ -51,7 +51,6 @@ final class FileReader
     /**
      * @throws \InvalidArgumentException
      * @throws FileNotReadableException
-     * @throws FileNotSeekableException
      */
     public function seek(int $position): void
     {
@@ -64,7 +63,7 @@ final class FileReader
         $seeked = @fseek($handle, $position);
 
         if (0 !== $seeked) {
-            throw new FileNotSeekableException($this->path);
+            throw new FileNotReadableException($this->path);
         }
     }
 
