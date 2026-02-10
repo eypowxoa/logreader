@@ -63,7 +63,9 @@ final class RecordReader
             $newLinePosition = mb_strpos($this->buffer, self::NEW_LINE, $offset, self::BYTE_ENCODING);
 
             if (false === $newLinePosition) {
-                return null;
+                $recordDate = null;
+
+                break;
             }
 
             $this->offset = ($newLinePosition + 1);
