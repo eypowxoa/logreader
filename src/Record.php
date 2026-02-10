@@ -6,12 +6,16 @@ namespace LogParser;
 
 final readonly class Record implements \Stringable
 {
+    public int $border;
+
     public function __construct(
         public \DateTimeImmutable $date,
         public int $position,
         public int $length,
         public string $record,
-    ) {}
+    ) {
+        $this->border = ($position + $length);
+    }
 
     public function __toString(): string
     {

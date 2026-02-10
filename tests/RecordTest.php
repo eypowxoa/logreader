@@ -13,6 +13,12 @@ use Carbon\CarbonImmutable;
  */
 final class RecordTest extends TestCase
 {
+    public function testConstruct(): void
+    {
+        $record = new Record(CarbonImmutable::parse('2001-02-03 04:05:06'), 7, 8, '9');
+        $this->assertSame(15, $record->border);
+    }
+
     public function testToString(): void
     {
         $record = new Record(CarbonImmutable::parse('2001-02-03 04:05:06'), 7, 8, '9');
