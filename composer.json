@@ -15,6 +15,7 @@
         "captainhook/captainhook-phar": "^5.27",
         "ergebnis/composer-normalize": "^2.49",
         "friendsofphp/php-cs-fixer": "^3.93",
+        "nesbot/carbon": "^3.11",
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-strict-rules": "^2.0",
         "phpunit/phpunit": "^12.5",
