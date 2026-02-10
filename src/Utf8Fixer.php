@@ -12,6 +12,8 @@ final readonly class Utf8Fixer
 
     /**
      * @return array{int,int,int}
+     *
+     * @throws Utf8WrongException
      */
     #[\NoDiscard()]
     public static function trimUtf8(string $data): array
