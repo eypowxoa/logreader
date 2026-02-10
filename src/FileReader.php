@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LogParser;
 
-final class FileReader
+abstract class FileReader
 {
     public private(set) int $readCounter = 0;
 
@@ -56,13 +56,7 @@ final class FileReader
             throw new \InvalidArgumentException(\sprintf('Seek position must not be negative, got %d', $position));
         }
 
-        $handle = $this->open();
-
-        $seeked = @fseek($handle, $position);
-
-        if (0 !== $seeked) {
-            throw new FileNotReadableException($this->path);
-        }
+        $this->internalSeek($position, false);
     }
 
     /**
@@ -71,11 +65,13 @@ final class FileReader
     #[\NoDiscard()]
     public function size(): int
     {
-        $size = @filesize($this->path);
+        $position = $this->tell();
 
-        if (false === $size) {
-            throw new FileNotReadableException($this->path);
-        }
+        $this->internalSeek(0, true);
+
+        $size = $this->tell();
+
+        $this->seek($position);
 
         return $size;
     }
@@ -102,6 +98,27 @@ final class FileReader
      *
      * @throws FileNotReadableException
      */
+    abstract protected function internalOpen();
+
+    /**
+     * @throws FileNotReadableException
+     */
+    private function internalSeek(int $position, bool $end): void
+    {
+        $handle = $this->open();
+
+        $seeked = @fseek($handle, $position, $end ? SEEK_END : SEEK_SET);
+
+        if (0 !== $seeked) {
+            throw new FileNotReadableException($this->path);
+        }
+    }
+
+    /**
+     * @return resource
+     *
+     * @throws FileNotReadableException
+     */
     private function open()
     {
         $handle = $this->handle;
@@ -110,11 +127,7 @@ final class FileReader
             return $handle;
         }
 
-        $handle = @fopen($this->path, 'r');
-
-        if (false === $handle) {
-            throw new FileNotReadableException($this->path);
-        }
+        $handle = $this->internalOpen();
 
         $this->handle = $handle;
 
