@@ -21,7 +21,7 @@ final class FileReaderMemory extends FileReader
     protected function internalOpen()
     {
         if ($this->unreadable) {
-            throw new FileNotReadableException(\sprintf('Not readable %s', $this->path));
+            throw new FileNotReadableException($this->path);
         }
 
         /** @var resource $handle */
