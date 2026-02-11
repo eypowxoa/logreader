@@ -6,8 +6,9 @@ namespace LogParser;
 
 final class FileReaderMemory extends FileReader
 {
-    public function __construct(private readonly string $data)
-    {
+    public function __construct(
+        private readonly string $data,
+    ) {
         parent::__construct(md5($data));
     }
 
