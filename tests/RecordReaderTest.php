@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LogParserTests;
 
+use Carbon\CarbonImmutable;
 use LogParser\Record;
 use LogParser\RecordReader;
 use LogParser\RecordWrongException;
@@ -80,5 +81,16 @@ final class RecordReaderTest extends TestCase
         yield 'should add buffer position' => ["2 a \n3 b \n4", false, 0, 1, [[5, [1, 5, 2, 'a']], [10, [6, 5, 3, 'b']], [10, null]]];
 
         yield 'should return last if buffer complete' => ["2 a \n3 b \na", true, 0, 1, [[5, [1, 5, 2, 'a']], [11, [6, 6, 3, "b \na"]], [11, null]]];
+    }
+
+    public function testReadRecordShouldUseTimezone(): void
+    {
+        $recordReader = new RecordReader('~(?<year>\d{4})\-(?<month>\d{2})\-(?<day>\d{2}) (?<hour>\d{2}):(?<minute>\d{2}):(?<second>\d{2})~', new \DateTimeZone('Africa/Tunis'));
+        $recordReader->setBuffer('2001-01-01 12:00:00', true);
+
+        $record = $recordReader->readRecord();
+
+        $this->assertInstanceOf(Record::class, $record);
+        $this->assertSame(CarbonImmutable::parse('2001-01-01 12:00:00', 'Africa/Tunis')->getTimestamp(), $record->date->getTimestamp());
     }
 }

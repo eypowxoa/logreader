@@ -20,9 +20,11 @@ final class RecordReader
 
     private int $position = 0;
 
-    public function __construct(string $datePattern)
-    {
-        $this->dateReader = new DateReader($datePattern);
+    public function __construct(
+        string $datePattern,
+        \DateTimeZone $dateTimeZone = new \DateTimeZone('UTC'),
+    ) {
+        $this->dateReader = new DateReader($datePattern, $dateTimeZone);
     }
 
     /**

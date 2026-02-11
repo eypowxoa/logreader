@@ -28,7 +28,10 @@ final class DateReader
 
     public private(set) int $offset = 0;
 
-    public function __construct(private readonly string $pattern) {}
+    public function __construct(
+        private readonly string $pattern,
+        private readonly \DateTimeZone $dateTimeZone = new \DateTimeZone('UTC'),
+    ) {}
 
     /**
      * @throws DateWrongException
@@ -70,7 +73,7 @@ final class DateReader
             throw new DateWrongException(\sprintf('Empty date %s at %d', $match[0][0] ?? '', $offset));
         }
 
-        $date = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
+        $date = new \DateTimeImmutable('now', $this->dateTimeZone);
         $date = $date->setDate($year, $month, $day);
         $date = $date->setTime($hour, $minute, $second, $microsecond);
 

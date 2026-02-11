@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LogParserTests;
 
+use Carbon\CarbonImmutable;
 use LogParser\DateReader;
 use LogParser\DateWrongException;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -230,5 +231,17 @@ final class DateReaderTest extends TestCase
         yield 'should parse maximal microsecond' => [$p, '[1-1-1 0:0:1.999999]', 0, '0001-01-01 00:00:01.999999', 20];
 
         yield 'should fail if microsecond too big' => [$p, '[1-1-1 0:0:1.1000000]', 0, new DateWrongException('Wrong microsecond 1000000 at 13, expected integer from 0 to 999999'), 0];
+    }
+
+    public function testReadDateShouldUseTimezone(): void
+    {
+        $dateReader = new DateReader('~(?<year>\d{4})\-(?<month>\d{2})\-(?<day>\d{2}) (?<hour>\d{2}):(?<minute>\d{2}):(?<second>\d{2})~', new \DateTimeZone('Africa/Tunis'));
+        $dateReader->buffer = '2001-01-01 12:00:00';
+        $dateReader->readDate(0);
+
+        $date = $dateReader->date;
+
+        $this->assertInstanceOf(\DateTimeImmutable::class, $date);
+        $this->assertSame(CarbonImmutable::parse('2001-01-01 12:00:00', 'Africa/Tunis')->getTimestamp(), $date->getTimestamp());
     }
 }

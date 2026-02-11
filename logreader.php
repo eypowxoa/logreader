@@ -52,7 +52,7 @@ if (array_key_exists('p', $_GET)) {
     foreach ($config->files as $file) {
         $bufferSize = 10_000;
         $fileReader = new FileReaderReal($file->filePath);
-        $recordReader = new RecordReader($file->datePattern);
+        $recordReader = new RecordReader($file->datePattern, $config->date->getTimezone());
         $recordSearch = new RecordSearch($fileReader, $recordReader, $bufferSize);
         $reader = new LogReader($fileReader, $recordReader, $recordSearch, $bufferSize);
 
