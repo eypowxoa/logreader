@@ -1,32 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LogParser;
 
-final class RecordSearch
+final readonly class RecordSearch
 {
-    /**
-     * @readonly
-     * @var \LogParser\FileReader
-     */
-    private $fileReader;
-    /**
-     * @readonly
-     * @var \LogParser\RecordReader
-     */
-    private $recordReader;
-    /**
-     * @readonly
-     * @var int
-     */
-    private $bufferSize;
     public function __construct(
-        FileReader $fileReader,
-        RecordReader $recordReader,
-        $bufferSize
+        private FileReader $fileReader,
+        private RecordReader $recordReader,
+        private int $bufferSize,
     ) {
-        $this->fileReader = $fileReader;
-        $this->recordReader = $recordReader;
-        $this->bufferSize = $bufferSize;
         if ($bufferSize <= 0) {
             throw new \InvalidArgumentException(\sprintf('Wrong buffer size %d, expected integer above zero', $bufferSize));
         }
@@ -35,9 +19,11 @@ final class RecordSearch
     /**
      * @throws FileWrongException
      */
-    public function findRecord(\DateTimeInterface $date, $since)
+    #[\NoDiscard()]
+    public function findRecord(\DateTimeInterface $date, bool $since): ?Record
     {
         $position = 0;
+
         try {
             $below = null;
             $above = null;
@@ -63,7 +49,7 @@ final class RecordSearch
                 }
 
                 while ((!$record instanceof Record) && ($middle > $lower)) {
-                    $middle = (int)\floor(($lower + $middle) / 2);
+                    $middle = intdiv($lower + $middle, 2);
 
                     $length = ($upper - $middle);
 
@@ -80,9 +66,7 @@ final class RecordSearch
 
                     $position = $middle;
 
-                    $a = Utf8Fixer::trimUtf8($buffer);
-                    $utf8Offset = $a[0];
-                    $utf8Length = $a[1];
+                    [$utf8Offset,$utf8Length] = Utf8Fixer::trimUtf8($buffer);
 
                     if ($utf8Length < $length) {
                         $buffer = mb_substr($buffer, $utf8Offset, $utf8Length, '8bit');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LogParser;
 
-interface CheckedException {}
+interface CheckedException extends \Throwable {}

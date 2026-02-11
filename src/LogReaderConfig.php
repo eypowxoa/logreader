@@ -4,25 +4,20 @@ declare(strict_types=1);
 
 namespace LogParser;
 
-final class LogReaderConfig
+final readonly class LogReaderConfig
 {
-    /**
-     * @readonly
-     * @var \DateTimeImmutable
-     */
-    public $date;
+    public \DateTimeImmutable $date;
 
-    /** @var LogReaderConfigFile[]
-     * @readonly */
-    public $files;
+    /** @var LogReaderConfigFile[] */
+    public array $files;
 
     /**
      * @param LogReaderConfigFile[] $fileList
      */
     public function __construct(
-        $date = 'now',
-        $timezone = 'UTC',
-        array $fileList = []
+        string $date = 'now',
+        string $timezone = 'UTC',
+        array $fileList = [],
     ) {
         $this->date = new \DateTimeImmutable($date, new \DateTimeZone($timezone));
 

@@ -6,8 +6,5 @@ namespace LogParser;
 
 final class FileNotReadableException extends FileException
 {
-    /**
-     * @var string
-     */
-    protected $prefix = 'Not readable';
+    protected string $prefix = 'Not readable';
 }

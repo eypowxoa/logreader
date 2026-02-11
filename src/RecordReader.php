@@ -1,64 +1,46 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LogParser;
 
 final class RecordReader
 {
-    /**
-     * @var string
-     */
-    const BYTE_ENCODING = '8bit';
+    private const string BYTE_ENCODING = '8bit';
 
-    /**
-     * @var string
-     */
-    const NEW_LINE = "\n";
+    private const string NEW_LINE = "\n";
 
-    /**
-     * @var int
-     */
-    public $offset = 0;
+    public int $offset = 0;
 
-    /**
-     * @var string
-     */
-    private $buffer = '';
+    private string $buffer = '';
 
-    /**
-     * @var bool
-     */
-    private $complete = false;
+    private bool $complete = false;
 
-    /**
-     * @readonly
-     * @var \LogParser\DateReader
-     */
-    private $dateReader;
+    private readonly DateReader $dateReader;
 
-    /**
-     * @var int
-     */
-    private $position = 0;
+    private int $position = 0;
 
     public function __construct(
-        $datePattern,
-        \DateTimeZone $dateTimeZone = null
+        string $datePattern,
+        \DateTimeZone $dateTimeZone = new \DateTimeZone('UTC'),
     ) {
-        $dateTimeZone = $dateTimeZone ?: new \DateTimeZone('UTC');
         $this->dateReader = new DateReader($datePattern, $dateTimeZone);
     }
 
     /**
      * @throws RecordWrongException
      */
-    public function readRecord()
+    #[\NoDiscard()]
+    public function readRecord(): ?Record
     {
         $this->dateReader->buffer = $this->buffer;
+
         $found = false;
         $dateOffset = 0;
         $recordDate = null;
         $recordOffset = 0;
         $newLinePosition = 0;
+
         while (true) {
             try {
                 $this->dateReader->readDate($this->offset);
@@ -96,16 +78,18 @@ final class RecordReader
 
             $this->offset = ($newLinePosition + 1);
         }
+
         if ($recordDate instanceof \DateTimeImmutable) {
             $bodyLength = ($this->offset - $dateOffset);
-            $bodyContent = \trim(mb_substr($this->buffer, $dateOffset, $bodyLength, self::BYTE_ENCODING));
+            $bodyContent = mb_substr($this->buffer, $dateOffset, $bodyLength, self::BYTE_ENCODING) |> \trim(...);
 
             return new Record($recordDate, $this->position + $recordOffset, $this->offset - $recordOffset, $bodyContent);
         }
+
         return null;
     }
 
-    public function setBuffer($buffer, $complete = false, $position = 0)
+    public function setBuffer(string $buffer, bool $complete = false, int $position = 0): void
     {
         $this->buffer = $buffer;
         $this->complete = $complete;

@@ -4,31 +4,15 @@ declare(strict_types=1);
 
 namespace LogParser;
 
-final class LogReaderConfigFile
+final readonly class LogReaderConfigFile
 {
-    /**
-     * @readonly
-     * @var string
-     */
-    public $filePath;
-    /**
-     * @readonly
-     * @var string
-     */
-    public $datePattern;
-    /**
-     * @readonly
-     * @var \Closure
-     */
-    public $filterFunction;
+    public \Closure $filterFunction;
 
     public function __construct(
-        $filePath,
-        $datePattern,
-        \Closure $filterFunction = null
+        public string $filePath,
+        public string $datePattern,
+        ?\Closure $filterFunction = null,
     ) {
-        $this->filePath = $filePath;
-        $this->datePattern = $datePattern;
         if ('' === $filePath) {
             throw new \InvalidArgumentException('Empty filePath parameter');
         }
@@ -37,8 +21,6 @@ final class LogReaderConfigFile
             throw new \InvalidArgumentException('Empty datePattern parameter');
         }
 
-        $this->filterFunction = ($filterFunction ?: (static function (Record $record) {
-            return true;
-        }));
+        $this->filterFunction = ($filterFunction ?? (static fn(Record $record): true => true));
     }
 }

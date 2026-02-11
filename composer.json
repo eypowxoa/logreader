@@ -3,11 +3,25 @@
     "description": "Universal web server log parser.",
     "license": "MIT",
     "require": {
-        "php": "^5.6",
+        "php": "^8.5",
         "ext-filter": "*",
         "ext-mbstring": "*"
     },
     "require-dev": {
+        "ext-ast": "*",
+        "ext-ctype": "*",
+        "ext-pcntl": "*",
+        "ext-pcov": "*",
+        "captainhook/captainhook-phar": "^5.27",
+        "ergebnis/composer-normalize": "^2.49",
+        "friendsofphp/php-cs-fixer": "^3.93",
+        "nesbot/carbon": "^3.11",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "phpunit/phpunit": "^12.5",
+        "rector/rector": "^2.3",
+        "roave/security-advisories": "dev-latest",
+        "shipmonk/composer-dependency-analyser": "^1.8"
     },
     "autoload": {
         "psr-4": {
@@ -20,6 +34,35 @@
         }
     },
     "config": {
+        "allow-plugins": {
+            "captainhook/captainhook-phar": true,
+            "cweagans/composer-patches": true,
+            "ergebnis/composer-normalize": true
+        },
         "sort-packages": true
+    },
+    "scripts": {
+        "checklist": [
+            "composer check-platform-reqs",
+            "composer validate --no-interaction --strict",
+            "composer normalize --dry-run --no-interaction",
+            "composer exec composer-dependency-analyser",
+            "composer cs",
+            "composer stan",
+            "composer test"
+        ],
+        "cs": [
+            "composer exec php-cs-fixer -- check --config configs/php-cs-fixer.php --verbose"
+        ],
+        "fix": [
+            "composer exec php-cs-fixer -- fix --config configs/php-cs-fixer.php --verbose"
+        ],
+        "stan": [
+            "composer exec phpstan -- analyze --configuration configs/phpstan.neon --memory-limit 256M",
+            "composer exec rector -- --config configs/rector.php --dry-run"
+        ],
+        "test": [
+            "composer exec phpunit -- --configuration configs/phpunit.xml"
+        ]
     }
 }

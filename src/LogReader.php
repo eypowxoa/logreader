@@ -1,43 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LogParser;
 
-final class LogReader
+final readonly class LogReader
 {
-    /**
-     * @readonly
-     * @var \LogParser\FileReader
-     */
-    private $fileReader;
-    /**
-     * @readonly
-     * @var \LogParser\RecordReader
-     */
-    private $recordReader;
-    /**
-     * @readonly
-     * @var \LogParser\RecordSearch
-     */
-    private $recordSearch;
-    /**
-     * @readonly
-     * @var int
-     */
-    private $bufferSize;
-    public function __construct(FileReader $fileReader, RecordReader $recordReader, RecordSearch $recordSearch, $bufferSize)
-    {
-        $this->fileReader = $fileReader;
-        $this->recordReader = $recordReader;
-        $this->recordSearch = $recordSearch;
-        $this->bufferSize = $bufferSize;
-    }
+    public function __construct(
+        private FileReader $fileReader,
+        private RecordReader $recordReader,
+        private RecordSearch $recordSearch,
+        private int $bufferSize,
+    ) {}
 
     /**
      * @return iterable<Record>
      *
      * @throws LogWrongException
      */
-    public function readLog(\DateTimeInterface $since, \DateTimeInterface $until)
+    public function readLog(\DateTimeInterface $since, \DateTimeInterface $until): iterable
     {
         $position = 0;
 
@@ -65,9 +46,7 @@ final class LogReader
 
                 $buffer = $this->fileReader->read($length);
 
-                $a = Utf8Fixer::trimUtf8($buffer);
-                $utf8Offset = $a[0];
-                $utf8Length = $a[1];
+                [$utf8Offset, $utf8Length] = Utf8Fixer::trimUtf8($buffer);
 
                 if ($utf8Length < $length) {
                     $buffer = mb_substr($buffer, $utf8Offset, $utf8Length, '8bit');
@@ -93,7 +72,7 @@ final class LogReader
                 'Failed to read log %s after %d. %s',
                 $this->fileReader->path,
                 $position,
-                $checkedException->getMessage()
+                $checkedException->getMessage(),
             ));
         }
     }

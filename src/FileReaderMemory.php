@@ -6,22 +6,10 @@ namespace LogParser;
 
 final class FileReaderMemory extends FileReader
 {
-    /**
-     * @readonly
-     * @var string
-     */
-    private $data;
-    /**
-     * @readonly
-     * @var bool
-     */
-    private $unreadable = false;
     public function __construct(
-        string $data,
-        bool $unreadable = false
+        private readonly string $data,
+        private readonly bool $unreadable = false,
     ) {
-        $this->data = $data;
-        $this->unreadable = $unreadable;
         parent::__construct(md5($data));
     }
 

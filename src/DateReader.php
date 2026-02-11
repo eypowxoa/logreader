@@ -1,85 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LogParser;
 
 final class DateReader
 {
-    /**
-     * @readonly
-     * @var string
-     */
-    private $pattern;
-    /**
-     * @readonly
-     * @var \DateTimeZone
-     */
-    private $dateTimeZone;
-    /**
-     * @var string
-     */
-    const KEY_DAY = 'day';
+    private const string KEY_DAY = 'day';
 
-    /**
-     * @var string
-     */
-    const KEY_HOUR = 'hour';
+    private const string KEY_HOUR = 'hour';
 
-    /**
-     * @var string
-     */
-    const KEY_MICROSECOND = 'microsecond';
+    private const string KEY_MICROSECOND = 'microsecond';
 
-    /**
-     * @var string
-     */
-    const KEY_MINUTE = 'minute';
+    private const string KEY_MINUTE = 'minute';
 
-    /**
-     * @var string
-     */
-    const KEY_MONTH = 'month';
+    private const string KEY_MONTH = 'month';
 
-    /**
-     * @var string
-     */
-    const KEY_SECOND = 'second';
+    private const string KEY_SECOND = 'second';
 
-    /**
-     * @var string
-     */
-    const KEY_YEAR = 'year';
+    private const string KEY_YEAR = 'year';
 
-    /**
-     * @var string
-     */
-    const UTF_8 = 'UTF-8';
+    private const string UTF_8 = 'UTF-8';
 
-    /**
-     * @var string
-     */
-    public $buffer = '';
+    public string $buffer = '';
 
-    /**
-     * @var \DateTimeImmutable|null
-     */
-    public $date;
+    public private(set) ?\DateTimeImmutable $date = null;
 
-    /**
-     * @var int
-     */
-    public $offset = 0;
+    public private(set) int $offset = 0;
 
-    public function __construct($pattern, \DateTimeZone $dateTimeZone = null)
-    {
-        $dateTimeZone = $dateTimeZone ?: new \DateTimeZone('UTC');
-        $this->pattern = $pattern;
-        $this->dateTimeZone = $dateTimeZone;
-    }
+    public function __construct(
+        private readonly string $pattern,
+        private readonly \DateTimeZone $dateTimeZone = new \DateTimeZone('UTC'),
+    ) {}
 
     /**
      * @throws DateWrongException
      */
-    public function readDate($offset)
+    public function readDate(int $offset): void
     {
         $this->date = null;
         $this->offset = $offset;
@@ -91,7 +48,7 @@ final class DateReader
         /** @var array<int|string,array{string,int}> $match */
         $match = [];
 
-        $pattern = $this->pattern . 'Au';
+        $pattern = $this->pattern . 'Anu';
 
         $matchResult = @preg_match($pattern, $this->buffer, $match, PREG_OFFSET_CAPTURE, $offset);
 
@@ -104,21 +61,21 @@ final class DateReader
         }
 
         /** @var array<int|string,array{string,int<-1,max>}> $match */
-        $year = $this->validateInt($match[self::KEY_YEAR][0] ?: null, 'year', 1, 9999, $match[self::KEY_YEAR][1] ?: 0) ?: 1;
-        $month = $this->validateMonth($match[self::KEY_MONTH][0] ?: null, $match[self::KEY_MONTH][1] ?: 0) ?: 1;
-        $day = $this->validateInt($match[self::KEY_DAY][0] ?: null, 'day', 1, 31, $match[self::KEY_DAY][1] ?: 0) ?: 1;
-        $hour = $this->validateInt($match[self::KEY_HOUR][0] ?: null, 'hour', 0, 23, $match[self::KEY_HOUR][1] ?: 0) ?: 0;
-        $minute = $this->validateInt($match[self::KEY_MINUTE][0] ?: null, 'minute', 0, 59, $match[self::KEY_MINUTE][1] ?: 0) ?: 0;
-        $second = $this->validateInt($match[self::KEY_SECOND][0] ?: null, 'second', 0, 59, $match[self::KEY_SECOND][1] ?: 0) ?: 0;
-        $microsecond = $this->validateInt($match[self::KEY_MICROSECOND][0] ?: null, 'microsecond', 0, 999999, $match[self::KEY_MICROSECOND][1] ?: 0) ?: 0;
+        $year = $this->validateInt($match[self::KEY_YEAR][0] ?? null, 'year', 1, 9999, $match[self::KEY_YEAR][1] ?? 0) ?? 1;
+        $month = $this->validateMonth($match[self::KEY_MONTH][0] ?? null, $match[self::KEY_MONTH][1] ?? 0) ?? 1;
+        $day = $this->validateInt($match[self::KEY_DAY][0] ?? null, 'day', 1, 31, $match[self::KEY_DAY][1] ?? 0) ?? 1;
+        $hour = $this->validateInt($match[self::KEY_HOUR][0] ?? null, 'hour', 0, 23, $match[self::KEY_HOUR][1] ?? 0) ?? 0;
+        $minute = $this->validateInt($match[self::KEY_MINUTE][0] ?? null, 'minute', 0, 59, $match[self::KEY_MINUTE][1] ?? 0) ?? 0;
+        $second = $this->validateInt($match[self::KEY_SECOND][0] ?? null, 'second', 0, 59, $match[self::KEY_SECOND][1] ?? 0) ?? 0;
+        $microsecond = $this->validateInt($match[self::KEY_MICROSECOND][0] ?? null, 'microsecond', 0, 999999, $match[self::KEY_MICROSECOND][1] ?? 0) ?? 0;
 
         if ((1 === $year) && (1 === $month) && (1 === $day) && (0 === $hour) && (0 === $minute) && (0 === $second) && (0 === $microsecond)) {
-            throw new DateWrongException(\sprintf('Empty date %s at %d', $match[0][0] ?: '', $offset));
+            throw new DateWrongException(\sprintf('Empty date %s at %d', $match[0][0] ?? '', $offset));
         }
 
         $date = new \DateTimeImmutable('now', $this->dateTimeZone);
         $date = $date->setDate($year, $month, $day);
-        $date = $date->setTime($hour, $minute, $second);
+        $date = $date->setTime($hour, $minute, $second, $microsecond);
 
         $this->date = $date;
         $this->offset += mb_strlen($match[0][0], '8bit');
@@ -127,7 +84,7 @@ final class DateReader
     /**
      * @throws DateWrongException
      */
-    private function validateInt($value, $period, $minimum, $maximum, $offset)
+    private function validateInt(?string $value, string $period, int $minimum, int $maximum, int $offset): ?int
     {
         if (null === $value) {
             return null;
@@ -149,7 +106,7 @@ final class DateReader
     /**
      * @throws DateWrongException
      */
-    private function validateMonth($value, $offset)
+    private function validateMonth(?string $value, int $offset): ?int
     {
         if (null === $value) {
             return null;
