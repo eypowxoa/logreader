@@ -1,2 +1,3 @@
 /.cache
 /vendor
+/logreader.config.php
