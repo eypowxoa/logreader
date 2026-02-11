@@ -19,6 +19,7 @@ final readonly class RecordSearch
     /**
      * @throws FileWrongException
      */
+    #[\NoDiscard()]
     public function findRecord(\DateTimeInterface $date, bool $since): ?Record
     {
         $position = 0;
