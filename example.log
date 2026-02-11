@@ -1,0 +1,30 @@
+[Wed Feb 11 12:48:00 2026] 172.17.0.1:55012 Accepted
+[Wed Feb 11 12:48:00 2026] 172.17.0.1:55012 [200]: GET /logreader.php?p=minute
+[Wed Feb 11 12:48:00 2026] 172.17.0.1:55012 Closing
+[Wed Feb 11 12:48:00 2026] 172.17.0.1:55016 Accepted
+[Wed Feb 11 12:48:00 2026] 172.17.0.1:55016 [404]: GET /favicon.ico - No such file or directory
+[Wed Feb 11 12:48:00 2026] 172.17.0.1:55016 Closing
+[Wed Feb 11 12:48:01 2026] 172.17.0.1:55018 Accepted
+[Wed Feb 11 12:48:01 2026] 172.17.0.1:55018 [200]: GET /logreader.php?p=hour
+[Wed Feb 11 12:48:01 2026] 172.17.0.1:55018 Closing
+[Wed Feb 11 12:48:01 2026] 172.17.0.1:55034 Accepted
+[Wed Feb 11 12:48:01 2026] 172.17.0.1:55034 [404]: GET /favicon.ico - No such file or directory
+[Wed Feb 11 12:48:01 2026] 172.17.0.1:55034 Closing
+[Wed Feb 11 12:48:01 2026] 172.17.0.1:55036 Accepted
+[Wed Feb 11 12:48:01 2026] 172.17.0.1:55036 [200]: GET /logreader.php?p=day
+[Wed Feb 11 12:48:01 2026] 172.17.0.1:55036 Closing
+[Wed Feb 11 12:48:01 2026] 172.17.0.1:55046 Accepted
+[Wed Feb 11 12:48:01 2026] 172.17.0.1:55046 [404]: GET /favicon.ico - No such file or directory
+[Wed Feb 11 12:48:01 2026] 172.17.0.1:55046 Closing
+[Wed Feb 11 12:48:02 2026] 172.17.0.1:55058 Accepted
+[Wed Feb 11 12:48:02 2026] 172.17.0.1:55058 [200]: GET /logreader.php?p=week
+[Wed Feb 11 12:48:02 2026] 172.17.0.1:55058 Closing
+[Wed Feb 11 12:48:02 2026] 172.17.0.1:55072 Accepted
+[Wed Feb 11 12:48:02 2026] 172.17.0.1:55072 [404]: GET /favicon.ico - No such file or directory
+[Wed Feb 11 12:48:02 2026] 172.17.0.1:55072 Closing
+[Wed Feb 11 12:48:06 2026] 172.17.0.1:54788 Accepted
+[Wed Feb 11 12:48:07 2026] 172.17.0.1:54788 [200]: GET /logreader.php?p=month
+[Wed Feb 11 12:48:07 2026] 172.17.0.1:54788 Closing
+[Wed Feb 11 12:48:07 2026] 172.17.0.1:54794 Accepted
+[Wed Feb 11 12:48:07 2026] 172.17.0.1:54794 [404]: GET /favicon.ico - No such file or directory
+[Wed Feb 11 12:48:07 2026] 172.17.0.1:54794 Closing
