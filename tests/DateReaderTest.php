@@ -14,8 +14,8 @@ use PHPUnit\Framework\TestCase;
  */
 final class DateReaderTest extends TestCase
 {
-    #[DataProvider('provideReadCases')]
-    public function testRead(string $pattern, string $buffer, int $offset, string|\Throwable|null $expectedDate, int $expectedOffset): void
+    #[DataProvider('provideReadDateCases')]
+    public function testReadDate(string $pattern, string $buffer, int $offset, string|\Throwable|null $expectedDate, int $expectedOffset): void
     {
         $dateReader = new DateReader($pattern);
         $dateReader->buffer = $buffer;
@@ -33,7 +33,7 @@ final class DateReaderTest extends TestCase
     /**
      * @return iterable<string,array{string,string,int,null|string|\Throwable,int}>
      */
-    public static function provideReadCases(): iterable
+    public static function provideReadDateCases(): iterable
     {
         $b = <<<'BUFFER'
             [2001-01-01 01:01:01.00001] A
