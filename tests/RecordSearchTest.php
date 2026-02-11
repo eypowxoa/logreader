@@ -121,4 +121,15 @@ final class RecordSearchTest extends TestCase
 
         yield 'should fail if not readable' => [null, 100, 2, true, new FileWrongException($error('', 0, \sprintf('Not readable %s', md5(''))))];
     }
+
+    public function testFindRecordReadCounSthouldBeLessThanSimpleBinarySearch(): void
+    {
+        $fileReaderMemory = new FileReaderMemory("2🎲🎲🎲🎲🎲🎲🎲🎲\n2ё⚽🎲2\n3ё⚽🎲3\n4ё⚽🎲4\n");
+        $recordReader = new RecordReader('~(?<day>[\dx])~');
+        $recordSearch = new RecordSearch($fileReaderMemory, $recordReader, 24);
+        $record = $recordSearch->findRecord(CarbonImmutable::parse('0001-01-03 00:00:00'), false);
+
+        $this->assertInstanceOf(Record::class, $record);
+        $this->assertLessThanOrEqual(3, $fileReaderMemory->readCounter);
+    }
 }

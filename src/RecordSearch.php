@@ -31,15 +31,24 @@ final readonly class RecordSearch
             $lower = 0;
             $upper = $this->fileReader->size();
 
+            $persistentBuffer = null;
+            $persistentBufferStart = $lower;
+
             while ($lower < $upper) {
                 $record = null;
 
                 $middle = $upper;
 
+                $length = ($upper - $lower);
+
+                if (($length >= $this->bufferSize) && (null === $persistentBuffer)) {
+                    $this->fileReader->seek($lower);
+                    $persistentBuffer = $this->fileReader->read($length);
+                    $persistentBufferStart = $lower;
+                }
+
                 while ((!$record instanceof Record) && ($middle > $lower)) {
                     $middle = intdiv($lower + $middle, 2);
-
-                    $this->fileReader->seek($middle);
 
                     $length = ($upper - $middle);
 
@@ -47,7 +56,12 @@ final readonly class RecordSearch
                         $length = $this->bufferSize;
                     }
 
-                    $buffer = $this->fileReader->read($length);
+                    if (null === $persistentBuffer) {
+                        $this->fileReader->seek($middle);
+                        $buffer = $this->fileReader->read($length);
+                    } else {
+                        $buffer = mb_substr($persistentBuffer, $middle - $persistentBufferStart, $length, '8bit');
+                    }
 
                     $position = $middle;
 
