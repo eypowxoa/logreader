@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 use LogParser\CheckedException;
 use LogParser\FileReaderReal;
 use LogParser\LogReader;
@@ -32,15 +30,25 @@ $recordList = [];
 
 if (array_key_exists('p', $_GET)) {
     try {
-        $period = new DateInterval(match ($_GET['p'] ?? null) {
-            'minute' => 'PT1M',
-            'hour' => 'PT1H',
-            'day' => 'P1D',
-            'week' => 'P1W',
-            'month' => 'P1M',
-            default => throw new RuntimeException('Wrong period'),
-        });
-    } catch (Throwable) {
+        $getPeriod = function () {
+            switch (isset($_GET['p']) ? $_GET['p'] : null) {
+                case 'minute':
+                    return 'PT1M';
+                case 'hour':
+                    return 'PT1H';
+                case 'day':
+                    return 'P1D';
+                case 'week':
+                    return 'P1W';
+                case 'month':
+                    return 'P1M';
+                default:
+                    throw new RuntimeException('Wrong period');
+            }
+        };
+
+        $period = new DateInterval($getPeriod());
+    } catch (Throwable $exception) {
         http_response_code(400);
 
         exit("Wrong period\n");
@@ -50,7 +58,7 @@ if (array_key_exists('p', $_GET)) {
     $since = $until->sub($period);
 
     foreach ($config->files as $file) {
-        $bufferSize = 10_000;
+        $bufferSize = 10000;
         $fileReader = new FileReaderReal($file->filePath);
         $recordReader = new RecordReader($file->datePattern, $config->date->getTimezone());
         $recordSearch = new RecordSearch($fileReader, $recordReader, $bufferSize);

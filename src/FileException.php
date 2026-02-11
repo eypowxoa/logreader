@@ -6,10 +6,19 @@ namespace LogParser;
 
 abstract class FileException extends \Exception implements CheckedException
 {
-    protected string $prefix = 'Wrong';
+    /**
+     * @readonly
+     * @var string
+     */
+    public $path;
+    /**
+     * @var string
+     */
+    protected $prefix = 'Wrong';
 
-    public function __construct(public readonly string $path, int $code = 0, ?\Throwable $previous = null)
+    public function __construct(string $path, int $code = 0, ?\Throwable $previous = null)
     {
+        $this->path = $path;
         parent::__construct($this->prefix . ' ' . $path, $code, $previous);
     }
 }

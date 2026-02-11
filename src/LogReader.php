@@ -1,24 +1,43 @@
 <?php
 
-declare(strict_types=1);
-
 namespace LogParser;
 
-final readonly class LogReader
+final class LogReader
 {
-    public function __construct(
-        private FileReader $fileReader,
-        private RecordReader $recordReader,
-        private RecordSearch $recordSearch,
-        private int $bufferSize,
-    ) {}
+    /**
+     * @readonly
+     * @var \LogParser\FileReader
+     */
+    private $fileReader;
+    /**
+     * @readonly
+     * @var \LogParser\RecordReader
+     */
+    private $recordReader;
+    /**
+     * @readonly
+     * @var \LogParser\RecordSearch
+     */
+    private $recordSearch;
+    /**
+     * @readonly
+     * @var int
+     */
+    private $bufferSize;
+    public function __construct(FileReader $fileReader, RecordReader $recordReader, RecordSearch $recordSearch, $bufferSize)
+    {
+        $this->fileReader = $fileReader;
+        $this->recordReader = $recordReader;
+        $this->recordSearch = $recordSearch;
+        $this->bufferSize = $bufferSize;
+    }
 
     /**
      * @return iterable<Record>
      *
      * @throws LogWrongException
      */
-    public function readLog(\DateTimeInterface $since, \DateTimeInterface $until): iterable
+    public function readLog(\DateTimeInterface $since, \DateTimeInterface $until)
     {
         $position = 0;
 
@@ -46,7 +65,9 @@ final readonly class LogReader
 
                 $buffer = $this->fileReader->read($length);
 
-                [$utf8Offset, $utf8Length] = Utf8Fixer::trimUtf8($buffer);
+                $a = Utf8Fixer::trimUtf8($buffer);
+                $utf8Offset = $a[0];
+                $utf8Length = $a[1];
 
                 if ($utf8Length < $length) {
                     $buffer = mb_substr($buffer, $utf8Offset, $utf8Length, '8bit');
@@ -72,7 +93,7 @@ final readonly class LogReader
                 'Failed to read log %s after %d. %s',
                 $this->fileReader->path,
                 $position,
-                $checkedException->getMessage(),
+                $checkedException->getMessage()
             ));
         }
     }

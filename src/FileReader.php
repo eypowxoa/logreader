@@ -1,17 +1,26 @@
 <?php
 
-declare(strict_types=1);
-
 namespace LogParser;
 
 abstract class FileReader
 {
-    public private(set) int $readCounter = 0;
+    /**
+     * @readonly
+     * @var string
+     */
+    public $path;
+    /**
+     * @var int
+     */
+    public $readCounter = 0;
 
     /** @var null|resource */
     private $handle;
 
-    public function __construct(public readonly string $path) {}
+    public function __construct($path)
+    {
+        $this->path = $path;
+    }
 
     public function __destruct()
     {
@@ -26,31 +35,27 @@ abstract class FileReader
 
     /**
      * @throws FileNotReadableException
+     * @param int $length
      */
-    #[\NoDiscard()]
-    public function read(int $length): string
+    public function read($length)
     {
         if ($length < 1) {
             throw new \InvalidArgumentException(\sprintf('Read length must be positive, got %d', $length));
         }
-
         $handle = $this->open();
-
         $read = @fread($handle, $length);
-
         if (false === $read) {
             throw new FileNotReadableException($this->path);
         }
-
         ++$this->readCounter;
-
         return $read;
     }
 
     /**
      * @throws FileNotReadableException
+     * @param int $position
      */
-    public function seek(int $position): void
+    public function seek($position)
     {
         if ($position < 0) {
             throw new \InvalidArgumentException(\sprintf('Seek position must not be negative, got %d', $position));
@@ -62,34 +67,25 @@ abstract class FileReader
     /**
      * @throws FileNotReadableException
      */
-    #[\NoDiscard()]
-    public function size(): int
+    public function size()
     {
         $position = $this->tell();
-
         $this->internalSeek(0, true);
-
         $size = $this->tell();
-
         $this->seek($position);
-
         return $size;
     }
 
     /**
      * @throws FileNotReadableException
      */
-    #[\NoDiscard()]
-    public function tell(): int
+    public function tell()
     {
         $handle = $this->open();
-
         $position = @ftell($handle);
-
         if (!\is_int($position)) {
             throw new FileNotReadableException($this->path);
         }
-
         return $position;
     }
 
@@ -103,7 +99,7 @@ abstract class FileReader
     /**
      * @throws FileNotReadableException
      */
-    private function internalSeek(int $position, bool $end): void
+    private function internalSeek($position, $end)
     {
         $handle = $this->open();
 

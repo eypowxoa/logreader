@@ -1,23 +1,47 @@
 <?php
 
-declare(strict_types=1);
-
 namespace LogParser;
 
-final readonly class Record implements \Stringable
+final class Record
 {
-    public int $border;
-
+    /**
+     * @readonly
+     * @var \DateTimeImmutable
+     */
+    public $date;
+    /**
+     * @readonly
+     * @var int
+     */
+    public $position;
+    /**
+     * @readonly
+     * @var int
+     */
+    public $length;
+    /**
+     * @readonly
+     * @var string
+     */
+    public $record;
+    /**
+     * @readonly
+     * @var int
+     */
+    public $border;
     public function __construct(
-        public \DateTimeImmutable $date,
-        public int $position,
-        public int $length,
-        public string $record,
+        \DateTimeImmutable $date,
+        $position,
+        $length,
+        $record
     ) {
+        $this->date = $date;
+        $this->position = $position;
+        $this->length = $length;
+        $this->record = $record;
         $this->border = ($position + $length);
     }
-
-    public function __toString(): string
+    public function __toString()
     {
         return \sprintf('%s %s', $this->date->format('Y-m-d H:i:s'), $this->record);
     }

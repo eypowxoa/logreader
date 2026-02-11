@@ -1,31 +1,31 @@
 <?php
 
-declare(strict_types=1);
-
 namespace LogParser;
 
-final readonly class Utf8Fixer
+final class Utf8Fixer
 {
-    private const string BYTE_ENCODING = '8bit';
+    /**
+     * @var string
+     */
+    const BYTE_ENCODING = '8bit';
 
-    private const int MAXIMAL_OFFSET = 10;
+    /**
+     * @var int
+     */
+    const MAXIMAL_OFFSET = 10;
 
     /**
      * @return array{int,int,int}
      *
      * @throws Utf8WrongException
      */
-    #[\NoDiscard()]
-    public static function trimUtf8(string $data): array
+    public static function trimUtf8($data)
     {
         $length = mb_strlen($data, self::BYTE_ENCODING);
-
         $maximalOffsetAtStart = min($length, self::MAXIMAL_OFFSET);
-
         $offsetAtStart = 0;
-
         while ($offsetAtStart < $maximalOffsetAtStart) {
-            $byteAtStart = mb_ord(mb_substr($data, $offsetAtStart, 1, self::BYTE_ENCODING), self::BYTE_ENCODING);
+            $byteAtStart = ord(mb_substr($data, $offsetAtStart, 1, self::BYTE_ENCODING));
 
             if (($byteAtStart & 0b11000000) !== 0b10000000) {
                 break;
@@ -33,18 +33,15 @@ final readonly class Utf8Fixer
 
             ++$offsetAtStart;
         }
-
         if ($offsetAtStart >= self::MAXIMAL_OFFSET) {
             throw new Utf8WrongException('Not an UTF-8');
         }
-
         $utf8Length = ($length - $offsetAtStart);
         $minimalUtf8Length = max($utf8Length - 10, 0);
         $skipLength = 0;
         $offsetAtEnd = 0;
-
         while (($utf8Length - $skipLength) > 0) {
-            $byteAtEnd = mb_ord(mb_substr($data, $offsetAtStart + $utf8Length - $skipLength - 1, 1, self::BYTE_ENCODING), self::BYTE_ENCODING);
+            $byteAtEnd = ord(mb_substr($data, $offsetAtStart + $utf8Length - $skipLength - 1, 1, self::BYTE_ENCODING));
 
             if (($byteAtEnd & 0b11000000) !== 0b10000000) {
                 if ((($byteAtEnd & 0b10000000) === 0b00000000) && ($skipLength > 0)) {
@@ -88,17 +85,13 @@ final readonly class Utf8Fixer
 
             ++$skipLength;
         }
-
         if (($utf8Length <= $minimalUtf8Length) && ($utf8Length > 0)) {
             throw new Utf8WrongException('Not an UTF-8');
         }
-
         $utf8 = mb_substr($data, $offsetAtStart, $utf8Length, self::BYTE_ENCODING);
-
         if (!mb_check_encoding($utf8, 'UTF-8')) {
             throw new Utf8WrongException('Not an UTF-8');
         }
-
         return [$offsetAtStart, $utf8Length, $offsetAtEnd];
     }
 }
