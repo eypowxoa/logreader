@@ -4,4 +4,4 @@ declare(strict_types=1);
 
 namespace LogParser;
 
-final class DateWrongException extends \Exception {}
+final class DateWrongException extends \Exception implements CheckedException {}

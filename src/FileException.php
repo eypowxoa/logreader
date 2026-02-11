@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LogParser;
 
-abstract class FileException extends \Exception
+abstract class FileException extends \Exception implements CheckedException
 {
     protected string $prefix = 'Wrong';
 

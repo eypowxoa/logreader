@@ -4,4 +4,4 @@ declare(strict_types=1);
 
 namespace LogParser;
 
-final class RecordWrongException extends \Exception {}
+final class RecordWrongException extends \Exception implements CheckedException {}
