@@ -8,6 +8,7 @@ final class FileReaderMemory extends FileReader
 {
     public function __construct(
         private readonly string $data,
+        private readonly bool $unreadable = false,
     ) {
         parent::__construct(md5($data));
     }
@@ -19,6 +20,10 @@ final class FileReaderMemory extends FileReader
      */
     protected function internalOpen()
     {
+        if ($this->unreadable) {
+            throw new FileNotReadableException(\sprintf('Not readable %s', $this->path));
+        }
+
         /** @var resource $handle */
         $handle = @fopen('php://memory', 'w');
 

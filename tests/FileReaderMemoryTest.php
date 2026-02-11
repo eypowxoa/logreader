@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LogParserTests;
 
+use LogParser\FileNotReadableException;
 use LogParser\FileReaderMemory;
 use PHPUnit\Framework\TestCase;
 
@@ -36,6 +37,13 @@ final class FileReaderMemoryTest extends TestCase
         $fileReaderMemory = new FileReaderMemory('<?php echo "OK\n";');
         $this->expectException(\InvalidArgumentException::class);
         $this->assertNotEmpty($fileReaderMemory->read(-1));
+    }
+
+    public function testReadShouldFailIfNotReadable(): void
+    {
+        $fileReaderMemory = new FileReaderMemory('', true);
+        $this->expectExceptionObject(new FileNotReadableException(md5('')));
+        $this->assertNotEmpty($fileReaderMemory->read(1));
     }
 
     public function testReadShouldFailIfZeroLength(): void
@@ -86,6 +94,13 @@ final class FileReaderMemoryTest extends TestCase
         $fileReaderMemory->seek(-1);
     }
 
+    public function testSeekShouldFailIfNotReadable(): void
+    {
+        $fileReaderMemory = new FileReaderMemory('', true);
+        $this->expectExceptionObject(new FileNotReadableException(md5('')));
+        $fileReaderMemory->seek(1);
+    }
+
     public function testSeekShouldMoveReadingPosition(): void
     {
         $fileReaderMemory = new FileReaderMemory('<?php echo "OK\n";');
@@ -101,10 +116,24 @@ final class FileReaderMemoryTest extends TestCase
         $this->assertSame('php', $fileReaderMemory->read(3));
     }
 
+    public function testSizeShouldFailIfNotReadable(): void
+    {
+        $fileReaderMemory = new FileReaderMemory('', true);
+        $this->expectExceptionObject(new FileNotReadableException(md5('')));
+        $this->assertNotEmpty($fileReaderMemory->size());
+    }
+
     public function testSizeShouldReturnFileSize(): void
     {
         $fileReaderMemory = new FileReaderMemory('<?php echo "OK\n";');
         $this->assertSame(18, $fileReaderMemory->size());
+    }
+
+    public function testTellShouldFailIfNotReadable(): void
+    {
+        $fileReaderMemory = new FileReaderMemory('', true);
+        $this->expectExceptionObject(new FileNotReadableException(md5('')));
+        $this->assertNotEmpty($fileReaderMemory->tell());
     }
 
     public function testTellShouldReturnPosition(): void
