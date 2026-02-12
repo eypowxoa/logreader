@@ -66,7 +66,7 @@ final readonly class RecordSearch
 
                     $position = $middle;
 
-                    [$utf8Offset,$utf8Length] = Utf8Fixer::trimUtf8($buffer);
+                    [$utf8Offset, $utf8Length] = Utf8Fixer::trimUtf8($buffer);
 
                     if ($utf8Length < $length) {
                         $buffer = mb_substr($buffer, $utf8Offset, $utf8Length, '8bit');
