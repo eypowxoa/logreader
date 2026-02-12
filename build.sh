@@ -47,6 +47,7 @@ cat build/logreader56/logreader56.php\
 | sed -E 's~, \$microsecond~~'\
 | sed -E 's~CheckedException~Exception~'\
 | sed -E 's~ implements Exception~~'\
+| sed -E 's~(\S+) <=> ([^)]+\))~\(\1 < \2\) ? -1 : \(\(\1 === \2\) ? 0 : 1\)~'\
 > build/logreader56/logreader56.tmp
 rm build/logreader56/logreader56.php
 mv build/logreader56/logreader56.tmp build/logreader56/logreader56.php

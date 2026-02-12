@@ -88,6 +88,8 @@ if (array_key_exists('p', $_GET)) {
     }
 }
 
+usort($recordList, static fn(Record $a, Record $b): int => $a->date->getTimestamp() <=> $b->date->getTimestamp());
+
 /** @var iterable<Record> $recordList */
 $recordList = array_slice($recordList, 0, $config->limit);
 ?>
