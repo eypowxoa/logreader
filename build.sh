@@ -5,7 +5,6 @@ echo '<?php' > build/logreader56/logreader56.php
 cat src/* logreader.php\
 | grep -v '^<?php'\
 | grep -Fv declare\
-| grep -Fv interface\
 | grep -Fv namespace\
 | grep -Fv use\
 | grep -Fv autoload.php\
@@ -24,7 +23,7 @@ docker run --interactive --rm --tty --volume "$PWD:/app:rw" --workdir /app logre
 rm build/rector71.php
 
 cat build/logreader56/logreader56.php\
-| sed -E 's~private const~const~'\
+| sed -E 's~(private|public) const~const~'\
 | sed -E 's~public private\(set\)~public~'\
 | sed -E 's~\?*(bool|int|string) \$~\$~'\
 | sed -E 's~\?*(bool|int|string) \$~\$~'\
@@ -35,7 +34,7 @@ cat build/logreader56/logreader56.php\
 | sed -E 's~\?\?~\?:~'\
 | sed -E 's~\?\?~\?:~'\
 | sed -E 's~\?\?~\?:~'\
-| sed -E 's~\): \??\w+~\)~'\
+| sed -E 's~\): \??\\?\w+~\)~'\
 | sed -E 's~\[\$utf8Offset, \$utf8Length\] = (.*)~$a=\1\$utf8Offset=$a[0];\$utf8Length=$a[1];~'\
 | sed -E 's~\(function~\[\$a=function~'\
 | sed -E 's~\)\(\)~,\$a()\]\[1\]~'\
@@ -46,6 +45,10 @@ cat build/logreader56/logreader56.php\
 | sed -E 's~Anu~Au~'\
 | sed -E 's~, \$microsecond~~'\
 | sed -E 's~CheckedException~Exception~'\
+| sed -E 's~interface Exception \{\}~~'\
+| sed -E 's~public function getIntervalString\(\)~public static function getIntervalString\($v\)~'\
+| sed -E 's~switch \(\$this\)~switch \(\$v\)~'\
+| sed -E 's~(\$\w+)\->getIntervalString\(\)~MultilogPeriod::getIntervalString(\1)~'\
 | sed -E 's~ implements Exception~~'\
 | sed -E 's~(\S+) <=> ([^)]+\))~\(\1 < \2\) ? -1 : \(\(\1 === \2\) ? 0 : 1\)~'\
 > build/logreader56/logreader56.tmp

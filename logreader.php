@@ -3,12 +3,11 @@
 declare(strict_types=1);
 
 use LogReader\CheckedException;
-use LogReader\FileReaderReal;
-use LogReader\LogReader;
+use LogReader\FileReaderRealFactory;
 use LogReader\LogReaderConfig;
+use LogReader\MultilogPeriod;
+use LogReader\MultilogReader;
 use LogReader\Record;
-use LogReader\RecordReader;
-use LogReader\RecordSearch;
 
 require __DIR__ . \DIRECTORY_SEPARATOR . 'vendor' . \DIRECTORY_SEPARATOR . 'autoload.php';
 
@@ -40,58 +39,32 @@ $recordList = [];
 
 if (array_key_exists('p', $_GET)) {
     try {
-        $period = new DateInterval(match ($_GET['p'] ?? null) {
-            'minute' => 'PT1M',
-            'hour' => 'PT1H',
-            'day' => 'P1D',
-            'week' => 'P1W',
-            'month' => 'P1M',
+        $period = match ($_GET['p'] ?? null) {
+            'minute' => MultilogPeriod::MINUTE,
+            'hour' => MultilogPeriod::HOUR,
+            'day' => MultilogPeriod::DAY,
+            'week' => MultilogPeriod::WEEK,
+            'month' => MultilogPeriod::MONTH,
             default => throw new RuntimeException('Wrong period'),
-        });
+        };
     } catch (Throwable) {
         http_response_code(400);
 
         exit("Wrong period\n");
     }
 
-    $until = $config->date;
-    $since = $until->sub($period);
-
-    foreach ($config->files as $file) {
-        $bufferSize = 10_000;
-        $fileReader = new FileReaderReal($file->filePath);
-        $recordReader = new RecordReader($file->datePattern, $config->date->getTimezone());
-        $recordSearch = new RecordSearch($fileReader, $recordReader, $bufferSize);
-        $reader = new LogReader($fileReader, $recordReader, $recordSearch, $bufferSize);
-
-        try {
-            $filterFunction = $file->filterFunction;
-            $recordCount = 0;
-            foreach ($reader->readLog($since, $until) as $record) {
-                if ($filterFunction($record)) {
-                    $recordList[] = $record;
-                    ++$recordCount;
-                    if ($recordCount > $config->limit) {
-                        break;
-                    }
-                }
-            }
-        } catch (InvalidArgumentException $invalidArgumentException) {
-            http_response_code(400);
-
-            exit($invalidArgumentException->getMessage());
-        } catch (CheckedException $checkedException) {
-            http_response_code(500);
-
-            exit($checkedException->getMessage());
+    try {
+        $fileReaderRealFactory = new FileReaderRealFactory();
+        $multilogReader = new MultilogReader($fileReaderRealFactory);
+        foreach ($multilogReader->readConfigured($config, $period) as $record) {
+            $recordList[] = $record;
         }
+    } catch (CheckedException $checkedException) {
+        http_response_code(500);
+
+        exit($checkedException->getMessage());
     }
 }
-
-usort($recordList, static fn(Record $a, Record $b): int => $a->date->getTimestamp() <=> $b->date->getTimestamp());
-
-/** @var iterable<Record> $recordList */
-$recordList = array_slice($recordList, 0, $config->limit);
 ?>
 <html lang="en">
     <head>
