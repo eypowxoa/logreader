@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LogParserTests;
+namespace LogReaderTests;
 
-use LogParser\Utf8Fixer;
-use LogParser\Utf8WrongException;
+use LogReader\Utf8Fixer;
+use LogReader\Utf8WrongException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

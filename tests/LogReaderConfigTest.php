@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LogParserTests;
+namespace LogReaderTests;
 
-use LogParser\LogReaderConfig;
-use LogParser\LogReaderConfigFile;
+use LogReader\LogReaderConfig;
+use LogReader\LogReaderConfigFile;
 use PHPUnit\Framework\TestCase;
 
 /**

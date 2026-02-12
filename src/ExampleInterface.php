@@ -2,6 +2,6 @@
 
 declare(strict_types=1);
 
-namespace LogParser;
+namespace LogReader;
 
 interface ExampleInterface {}

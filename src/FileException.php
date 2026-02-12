@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LogParser;
+namespace LogReader;
 
 abstract class FileException extends \Exception implements CheckedException
 {

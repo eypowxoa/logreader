@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LogParser;
+namespace LogReader;
 
 final class DateReader
 {

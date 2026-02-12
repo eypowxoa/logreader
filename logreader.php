@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use LogParser\CheckedException;
-use LogParser\FileReaderReal;
-use LogParser\LogReader;
-use LogParser\LogReaderConfig;
-use LogParser\Record;
-use LogParser\RecordReader;
-use LogParser\RecordSearch;
+use LogReader\CheckedException;
+use LogReader\FileReaderReal;
+use LogReader\LogReader;
+use LogReader\LogReaderConfig;
+use LogReader\Record;
+use LogReader\RecordReader;
+use LogReader\RecordSearch;
 
 require __DIR__ . \DIRECTORY_SEPARATOR . 'vendor' . \DIRECTORY_SEPARATOR . 'autoload.php';
 

@@ -16,11 +16,11 @@ cat logreader.config.example.php\
 | grep -Fv use\
 > build/logreader56/logreader56.config.php
 
-docker build --file configs/dockerfile --tag logparser:local .
-docker run --interactive --rm --tty --volume "$PWD:/app:rw" --workdir /app logparser:local composer install
+docker build --file configs/dockerfile --tag logreader:local .
+docker run --interactive --rm --tty --volume "$PWD:/app:rw" --workdir /app logreader:local composer install
 cat configs/rector.php | sed -E 's~withPhpSets\(\)~withDowngradeSets\(php71:true\)~' > build/rector71.php
-docker run --interactive --rm --tty --volume "$PWD:/app:rw" --workdir /app logparser:local composer exec rector -- --config build/rector71.php build/logreader56/logreader56.php
-docker run --interactive --rm --tty --volume "$PWD:/app:rw" --workdir /app logparser:local composer exec rector -- --config build/rector71.php build/logreader56/logreader56.config.php
+docker run --interactive --rm --tty --volume "$PWD:/app:rw" --workdir /app logreader:local composer exec rector -- --config build/rector71.php build/logreader56/logreader56.php
+docker run --interactive --rm --tty --volume "$PWD:/app:rw" --workdir /app logreader:local composer exec rector -- --config build/rector71.php build/logreader56/logreader56.config.php
 rm build/rector71.php
 
 cat build/logreader56/logreader56.php\

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LogParserTests;
+namespace LogReaderTests;
 
 use PHPUnit\Framework\TestCase;
 

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LogParserTests;
+namespace LogReaderTests;
 
 use Carbon\CarbonImmutable;
-use LogParser\Record;
-use LogParser\RecordReader;
-use LogParser\RecordWrongException;
+use LogReader\Record;
+use LogReader\RecordReader;
+use LogReader\RecordWrongException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

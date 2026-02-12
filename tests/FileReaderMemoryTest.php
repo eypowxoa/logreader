@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LogParserTests;
+namespace LogReaderTests;
 
-use LogParser\FileNotReadableException;
-use LogParser\FileReaderMemory;
+use LogReader\FileNotReadableException;
+use LogReader\FileReaderMemory;
 use PHPUnit\Framework\TestCase;
 
 /**

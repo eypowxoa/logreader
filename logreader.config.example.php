@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use LogParser\LogReaderConfig;
-use LogParser\LogReaderConfigFile;
-use LogParser\Record;
+use LogReader\LogReaderConfig;
+use LogReader\LogReaderConfigFile;
+use LogReader\Record;
 
 return new LogReaderConfig(
     date: '2026-02-11 12:49:07',

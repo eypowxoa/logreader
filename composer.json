@@ -1,6 +1,6 @@
 {
-    "name": "logparser/logparser",
-    "description": "Universal web server log parser.",
+    "name": "logreader/logreader",
+    "description": "Universal web server log reader.",
     "license": "MIT",
     "require": {
         "php": "^8.5",
@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "LogParser\\": "src/"
+            "LogReader\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "LogParserTests\\": "tests/"
+            "LogReaderTests\\": "tests/"
         }
     },
     "config": {
