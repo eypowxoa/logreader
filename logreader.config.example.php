@@ -9,6 +9,8 @@ use LogParser\Record;
 return new LogReaderConfig(
     date: '2026-02-11 12:49:07',
     timezone: 'UTC',
+    login: 'example',
+    password: 'elpmaxe',
     fileList: [
         new LogReaderConfigFile(
             filePath: 'example.log',

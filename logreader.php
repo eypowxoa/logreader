@@ -27,6 +27,14 @@ if (!$config instanceof LogReaderConfig) {
     exit(sprintf("Not a %s in %s\n", LogReaderConfig::class, $configName));
 }
 
+if (($_SERVER['HTTP_AUTHORIZATION'] ?? '') !== $config->httpAuth) {
+    http_response_code(401);
+
+    header('WWW-Authenticate: Basic realm="Log Reader", charset="UTF-8"');
+
+    exit('Not authorized');
+}
+
 /** @var iterable<Record> $recordList */
 $recordList = [];
 

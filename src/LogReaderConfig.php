@@ -11,13 +11,17 @@ final readonly class LogReaderConfig
     /** @var LogReaderConfigFile[] */
     public array $files;
 
+    public string $httpAuth;
+
     /**
      * @param LogReaderConfigFile[] $fileList
      */
     public function __construct(
-        string $date = 'now',
-        string $timezone = 'UTC',
-        array $fileList = [],
+        string $date,
+        string $timezone,
+        public string $login,
+        public string $password,
+        array $fileList,
     ) {
         $this->date = new \DateTimeImmutable($date, new \DateTimeZone($timezone));
 
@@ -25,6 +29,7 @@ final readonly class LogReaderConfig
             throw new \InvalidArgumentException('Empty fileList parameter');
         }
 
+        $this->httpAuth = ('Basic ' . base64_encode($login . ':' . $password));
         $this->files =  $fileList;
     }
 }
