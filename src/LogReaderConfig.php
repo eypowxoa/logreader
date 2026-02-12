@@ -21,12 +21,17 @@ final readonly class LogReaderConfig
         string $timezone,
         public string $login,
         public string $password,
+        public int $limit,
         array $fileList,
     ) {
         $this->date = new \DateTimeImmutable($date, new \DateTimeZone($timezone));
 
         if ([] === $fileList) {
             throw new \InvalidArgumentException('Empty fileList parameter');
+        }
+
+        if ($limit <= 0) {
+            throw new \InvalidArgumentException('Wrong limit, expected positive integer');
         }
 
         $this->httpAuth = ('Basic ' . base64_encode($login . ':' . $password));

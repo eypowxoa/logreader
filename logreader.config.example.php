@@ -11,6 +11,7 @@ return new LogReaderConfig(
     timezone: 'UTC',
     login: 'example',
     password: 'elpmaxe',
+    limit: 100,
     fileList: [
         new LogReaderConfigFile(
             filePath: 'example.log',

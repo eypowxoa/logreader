@@ -66,9 +66,14 @@ if (array_key_exists('p', $_GET)) {
 
         try {
             $filterFunction = $file->filterFunction;
+            $recordCount = 0;
             foreach ($reader->readLog($since, $until) as $record) {
                 if ($filterFunction($record)) {
                     $recordList[] = $record;
+                    ++$recordCount;
+                    if ($recordCount > $config->limit) {
+                        break;
+                    }
                 }
             }
         } catch (InvalidArgumentException $invalidArgumentException) {
@@ -82,6 +87,9 @@ if (array_key_exists('p', $_GET)) {
         }
     }
 }
+
+/** @var iterable<Record> $recordList */
+$recordList = array_slice($recordList, 0, $config->limit);
 ?>
 <html lang="en">
     <head>
