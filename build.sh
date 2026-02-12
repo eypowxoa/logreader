@@ -60,6 +60,6 @@ mv build/logreader56/logreader56.config.tmp build/logreader56/logreader56.config
 
 cp example.log build/logreader56/example.log
 
-rm build/logreader56.tar.gz
-tar --create --directory build --file build/logreader56.tar.gz --gzip logreader56
-rm -r build/logreader56
+rm -f build/logreader56.tar.gz
+
+test "$1" = '--archive' && tar --create --directory build --file build/logreader56.tar.gz --gzip logreader56 && rm -r build/logreader56
