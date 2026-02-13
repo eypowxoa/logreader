@@ -7,7 +7,7 @@ use LogReader\LogReaderConfigFile;
 use LogReader\Record;
 
 return new LogReaderConfig(
-    date: '2026-02-11 12:49:07',
+    date: '2026-02-11 12:49:07', // can be 'now'
     timezone: 'UTC',
     login: 'example',
     password: 'elpmaxe',
