@@ -1,7 +1,7 @@
 FROM php:8.5-cli-alpine
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions @composer
-RUN install-php-extensions ast ctype mbstring pcntl pcov
+RUN install-php-extensions ast ctype filter mbstring pcntl pcov
 RUN apk add --no-cache gnupg
 ENV COMPOSER_ROOT_VERSION=0.0.1
 WORKDIR /app
