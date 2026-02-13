@@ -2,7 +2,7 @@
 
 Web page for viewing a short period of a big log files.
 
-# Usage
+# Usage for PHP 5.6
 
 Build `logreader56.tar.gz` for PHP 5.6
 
@@ -12,7 +12,7 @@ Edit `logreader56.config.php` as you need.
 
 Open `logreader56.php` in a browser.
 
-# Requirements for running
+# Requirements for running in PHP 5.6
 
 - PHP 5.6 with extensions:
 - filter
@@ -26,7 +26,7 @@ Open `logreader56.php` in a browser.
 
 - bash
 
-# Building fo PHP 5.6
+# Building for PHP 5.6
 
 Subfolder `logreader56` in the `build` folder `./build56.sh`
 
