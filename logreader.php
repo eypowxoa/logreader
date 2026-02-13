@@ -13,7 +13,17 @@ require __DIR__ . \DIRECTORY_SEPARATOR . 'vendor' . \DIRECTORY_SEPARATOR . 'auto
 
 try {
     $configName = (pathinfo(__FILE__, \PATHINFO_FILENAME) . '.config.php');
-    $config = @require __DIR__ . \DIRECTORY_SEPARATOR . $configName;
+    $configPath = (__DIR__ . \DIRECTORY_SEPARATOR . $configName);
+    if (!file_exists($configPath)) {
+        $exampleName = (pathinfo(__FILE__, \PATHINFO_FILENAME) . '.config.example.php');
+        $examplePath = (__DIR__ . \DIRECTORY_SEPARATOR . $exampleName);
+        if (!file_exists($examplePath)) {
+            throw new RuntimeException(sprintf('No config file %s', $configName));
+        }
+        $configName = $exampleName;
+        $configPath = $examplePath;
+    }
+    $config = @require $configPath;
 } catch (Throwable $throwable) {
     http_response_code(500);
 
