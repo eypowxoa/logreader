@@ -14,11 +14,11 @@ final readonly class LogReader
     ) {}
 
     /**
-     * @return iterable<Record>
+     * @return \Iterator<int,Record>
      *
      * @throws LogWrongException
      */
-    public function readLog(\DateTimeInterface $since, \DateTimeInterface $until): iterable
+    public function readLog(\DateTimeInterface $since, \DateTimeInterface $until): \Iterator
     {
         $position = 0;
 
