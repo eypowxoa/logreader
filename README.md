@@ -28,9 +28,9 @@ Open `logreader56.php` in a browser.
 
 # Building fo PHP 5.6
 
-Subfolder `logreader56` in the `build` folder `./build.sh`
+Subfolder `logreader56` in the `build` folder `./build56.sh`
 
-Archive `logreader56.tar.gz` in the `build` folder `./build.sh --archive`
+Archive `logreader56.tar.gz` in the `build` folder `./build56.sh --archive`
 
 # Testing
 
@@ -62,4 +62,4 @@ Run PHP 8.5 web page http://localhost:8000/logreader.php (login `example` passwo
 
 Run PHP 5.6 web page http://localhost:8001/logreader56.php (login `example` password `elpmaxe`)
 
-`./build.sh && docker run --interactive --publish 8001:8001 --rm --tty --volume "$PWD/build/logreader56:/app:rw" --workdir /app logreader56:local php -S 0.0.0.0:8001 -t .`
+`./build56.sh && docker run --interactive --publish 8001:8001 --rm --tty --volume "$PWD/build/logreader56:/app:rw" --workdir /app logreader56:local php -S 0.0.0.0:8001 -t .`
