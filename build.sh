@@ -33,9 +33,6 @@ cat build/logreader56/logreader56.php\
 | sed -E 's~\?*(bool|int|string) \$~\$~'\
 | sed -E 's~\?*(bool|int|string) \$~\$~'\
 | sed -E 's~\?\\\w+ \$~\$~'\
-| sed -E 's~\?\?~\?:~'\
-| sed -E 's~\?\?~\?:~'\
-| sed -E 's~\?\?~\?:~'\
 | sed -E 's~\): \??\\?\w+~\)~'\
 | sed -E 's~\[\$utf8Offset, \$utf8Length\] = (.*)~$a=\1\$utf8Offset=$a[0];\$utf8Length=$a[1];~'\
 | sed -E 's~\(function~\[\$a=function~'\
@@ -53,6 +50,10 @@ cat build/logreader56/logreader56.php\
 | sed -E 's~(\$\w+)\->getIntervalString\(\)~MultilogPeriod::getIntervalString(\1)~'\
 | sed -E 's~ implements Exception~~'\
 | sed -E 's~(\S+) <=> ([^)]+\))~\(\1 < \2\) ? -1 : \(\(\1 === \2\) ? 0 : 1\)~'\
+| sed -E 's~(\$(\w|_)+(\[(\w|:|'"'"')+\])+)\s*\?:\s*((\w|'"'"')+)~(isset(\1) ? \1 : \5)~'\
+| sed -E 's~(\$(\w|_)+(\[(\w|:|'"'"')+\])+)\s*\?:\s*((\w|'"'"')+)~(isset(\1) ? \1 : \5)~'\
+| sed -E 's~(\$(\w|_)+(\[(\w|:|'"'"')+\])+)\s*\?:\s*((\w|'"'"')+)~(isset(\1) ? \1 : \5)~'\
+| sed -E 's~(\$(\w|_)+(\[(\w|:|'"'"')+\])+)\s*\?:\s*((\w|'"'"')+)~(isset(\1) ? \1 : \5)~'\
 > build/logreader56/logreader56.tmp
 rm build/logreader56/logreader56.php
 mv build/logreader56/logreader56.tmp build/logreader56/logreader56.php
