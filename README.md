@@ -60,6 +60,6 @@ Run PHP 8.5 web page http://localhost:8000/logreader.php (login `example` passwo
 
 `./run.sh pwd && docker run --interactive --publish 8000:8000 --rm --tty --volume "$PWD:/app:rw" --workdir /app logreader:local php -S 0.0.0.0:8000 -t .`
 
-Run PHP 5.6 web page http://localhost:8000/logreader56.php (login `example` password `elpmaxe`)
+Run PHP 5.6 web page http://localhost:8001/logreader56.php (login `example` password `elpmaxe`)
 
-`./build.sh && docker run --interactive --publish 8000:8000 --rm --tty --volume "$PWD/build/logreader56:/app:rw" --workdir /app logreader56:local php -S 0.0.0.0:8000 -t .`
+`./build.sh && docker run --interactive --publish 8001:8001 --rm --tty --volume "$PWD/build/logreader56:/app:rw" --workdir /app logreader56:local php -S 0.0.0.0:8001 -t .`
