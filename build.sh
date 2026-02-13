@@ -1,4 +1,6 @@
 #!/usr/bin/env sh
+set -e
+
 mkdir -p build/logreader56
 
 echo '<?php' > build/logreader56/logreader56.php
