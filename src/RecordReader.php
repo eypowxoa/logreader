@@ -45,7 +45,11 @@ final class RecordReader
             try {
                 $this->dateReader->readDate($this->offset);
             } catch (DateWrongException $dateWrongException) {
-                throw new RecordWrongException($dateWrongException->getMessage());
+                throw new RecordWrongException(
+                    $dateWrongException->getMessage(),
+                    0,
+                    $dateWrongException,
+                );
             }
 
             $offset = $this->offset;

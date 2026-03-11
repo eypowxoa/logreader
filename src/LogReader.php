@@ -68,12 +68,16 @@ final readonly class LogReader
                 }
             }
         } catch (CheckedException $checkedException) {
-            throw new LogWrongException(\sprintf(
-                'Failed to read log %s after %d. %s',
-                $this->fileReader->path,
-                $position,
-                $checkedException->getMessage(),
-            ));
+            throw new LogWrongException(
+                \sprintf(
+                    'Failed to read log %s after %d. %s',
+                    $this->fileReader->path,
+                    $position,
+                    $checkedException->getMessage(),
+                ),
+                0,
+                $checkedException,
+            );
         }
     }
 }
