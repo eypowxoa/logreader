@@ -42,7 +42,7 @@ final readonly class RecordSearch
 
                 $length = ($upper - $lower);
 
-                if (($length >= $this->bufferSize) && (null === $persistentBuffer)) {
+                if (($length <= $this->bufferSize) && (null === $persistentBuffer)) {
                     $this->fileReader->seek($lower);
                     $persistentBuffer = $this->fileReader->read($length);
                     $persistentBufferStart = $lower;

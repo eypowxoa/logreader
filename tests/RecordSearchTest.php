@@ -132,4 +132,15 @@ final class RecordSearchTest extends TestCase
         $this->assertInstanceOf(Record::class, $record);
         $this->assertLessThanOrEqual(3, $fileReaderMemory->readCounter);
     }
+
+    public function testFindRecordShouldNotReadFullFile(): void
+    {
+        $fileReaderMemory = new FileReaderMemory("2🎲🎲🎲🎲🎲🎲🎲🎲\n2ё⚽🎲2\n3ё⚽🎲3\n4ё⚽🎲4\n");
+        $recordReader = new RecordReader('~(?<day>[\dx])~');
+        $recordSearch = new RecordSearch($fileReaderMemory, $recordReader, 24);
+        $record = $recordSearch->findRecord(CarbonImmutable::parse('0001-01-03 00:00:00'), false);
+
+        $this->assertInstanceOf(Record::class, $record);
+        $this->assertGreaterThan(1, $fileReaderMemory->readCounter);
+    }
 }
