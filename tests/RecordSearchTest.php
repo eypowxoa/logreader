@@ -122,7 +122,7 @@ final class RecordSearchTest extends TestCase
         yield 'should fail if not readable' => [null, 100, 2, true, new FileWrongException($error('', 0, \sprintf('Not readable %s', md5(''))))];
     }
 
-    public function testFindRecordReadCounSthouldBeLessThanSimpleBinarySearch(): void
+    public function testFindRecordReadCounShouldBeLessThanSimpleBinarySearch(): void
     {
         $fileReaderMemory = new FileReaderMemory("2🎲🎲🎲🎲🎲🎲🎲🎲\n2ё⚽🎲2\n3ё⚽🎲3\n4ё⚽🎲4\n");
         $recordReader = new RecordReader('~(?<day>[\dx])~');
