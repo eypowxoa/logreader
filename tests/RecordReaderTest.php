@@ -91,6 +91,7 @@ final class RecordReaderTest extends TestCase
 
         $record = $recordReader->readRecord();
 
+        $this->assertInstanceOf(Record::class, $record);
         $this->assertSame('source', $record->source);
     }
 
