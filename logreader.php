@@ -65,7 +65,10 @@ if (array_key_exists('p', $_GET)) {
     try {
         $fileReaderRealFactory = new FileReaderRealFactory();
         $multilogReader = new MultilogReader($fileReaderRealFactory);
-        foreach ($multilogReader->readConfigured($config, $period) as $record) {
+        foreach ($multilogReader->readConfigured(
+            $config,
+            $period,
+        ) as $record) {
             $recordList[] = $record;
         }
     } catch (CheckedException $checkedException) {

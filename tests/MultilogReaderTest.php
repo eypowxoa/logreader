@@ -46,7 +46,10 @@ final class MultilogReaderTest extends TestCase
         $fileReaderMemoryFactory = new FileReaderMemoryFactory();
         $multilogReader = new MultilogReader($fileReaderMemoryFactory);
 
-        foreach ($multilogReader->readConfigured($logReaderConfig, $multilogPeriod) as $record) {
+        foreach ($multilogReader->readConfigured(
+            $logReaderConfig,
+            $multilogPeriod,
+        ) as $record) {
             $recordList[] = $record->record;
         }
 
@@ -88,7 +91,14 @@ final class MultilogReaderTest extends TestCase
         $fileReaderMemoryFactory = new FileReaderMemoryFactory();
         $multilogReader = new MultilogReader($fileReaderMemoryFactory);
 
-        $record = $multilogReader->readConfigured($logReaderConfig, MultilogPeriod::MINUTE)[0];
+        $recordList = $multilogReader->readConfigured(
+            $logReaderConfig,
+            MultilogPeriod::MINUTE,
+        );
+
+        $this->assertArrayHasKey(0, $recordList);
+
+        $record = $recordList[0];
 
         $this->assertSame('2.txt', $record->source);
     }
