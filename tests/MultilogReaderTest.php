@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace LogReaderTests;
 
 use LogReader\FileReaderMemoryFactory;
+use LogReader\FilterVariant;
 use LogReader\LogReaderConfig;
 use LogReader\LogReaderConfigFile;
 use LogReader\MultilogPeriod;
 use LogReader\MultilogReader;
+use LogReader\Record;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -70,6 +72,45 @@ final class MultilogReaderTest extends TestCase
         yield 'should find for week' => ['0001-01-08 00:00:04', MultilogPeriod::WEEK, ['e', 'b']];
 
         yield 'should find for month' => ['0001-02-01 00:00:04', MultilogPeriod::MONTH, ['e', 'b']];
+    }
+
+    public function testReadConfiguredShouldPassVariantNumberToFilterFunction(): void
+    {
+        /** @var FilterVariant[] $passedVariants */
+        $passedVariants = [];
+
+        $logReaderConfig = new LogReaderConfig(
+            '0001-01-01 00:01:00',
+            'UTC',
+            '',
+            '',
+            2,
+            [
+                new LogReaderConfigFile(
+                    "3a\n5b\n",
+                    '~(?<second>\d)~',
+                    static function (Record $record, FilterVariant $filterVariant) use (&$passedVariants): true {
+                        $passedVariants[] = $filterVariant;
+
+                        return true;
+                    },
+                ),
+            ],
+        );
+
+        $fileReaderMemoryFactory = new FileReaderMemoryFactory();
+        $multilogReader = new MultilogReader($fileReaderMemoryFactory);
+
+        $multilogReader->readConfigured($logReaderConfig, MultilogPeriod::MINUTE, FilterVariant::VARIANT_1);
+
+        $this->assertSame([FilterVariant::VARIANT_1, FilterVariant::VARIANT_1], $passedVariants);
+
+        /** @var FilterVariant[] $passedVariants */
+        $passedVariants = [];
+
+        $multilogReader->readConfigured($logReaderConfig, MultilogPeriod::MINUTE, FilterVariant::VARIANT_2);
+
+        $this->assertSame([FilterVariant::VARIANT_2, FilterVariant::VARIANT_2], $passedVariants);
     }
 
     public function testReadConfiguredShouldUseBasenameAsRecordSource(): void

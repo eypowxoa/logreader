@@ -8,13 +8,13 @@ cat src/* logreader.php\
 | grep -v '^<?php'\
 | grep -Fv declare\
 | grep -Fv namespace\
-| grep -Fv use\
+| grep -Fv 'use LogReader'\
 | grep -Fv autoload.php\
 >> build/logreader56/logreader56.php
 
 cat logreader.config.example.php\
 | grep -Fv declare\
-| grep -Fv use\
+| grep -Fv 'use LogReader'\
 > build/logreader56/logreader56.config.php
 
 docker build --file configs/dockerfile --tag logreader:local .
@@ -58,6 +58,9 @@ cat build/logreader56/logreader56.php\
 | sed -E 's~(\$(\w|_)+(\[(\w|:|'"'"'|\$)+\])+)\s*\?:\s*((\w|'"'"')+)~(isset(\1) ? \1 : \5)~'\
 | sed -E 's~(\$(\w|_)+(\[(\w|:|'"'"'|\$)+\])+)\s*\?:\s*((\w|'"'"')+)~(isset(\1) ? \1 : \5)~'\
 | sed -E 's~(\$(\w|_)+(\[(\w|:|'"'"'|\$)+\])+)\s*\?:\s*((\w|'"'"')+)~(isset(\1) ? \1 : \5)~'\
+| sed -E 's~\??(FilterVariant|MultilogPeriod) \$~\$~'\
+| sed -E 's~\??(FilterVariant|MultilogPeriod) \$~\$~'\
+| sed -E 's~instanceof (FilterVariant|MultilogPeriod)~~'\
 > build/logreader56/logreader56.tmp
 rm build/logreader56/logreader56.php
 mv build/logreader56/logreader56.tmp build/logreader56/logreader56.php
@@ -65,6 +68,8 @@ mv build/logreader56/logreader56.tmp build/logreader56/logreader56.php
 cat build/logreader56/logreader56.config.php\
 | sed -E 's~: bool~~'\
 | sed -E 's~\w+: ~~'\
+| sed -E 's~\??(FilterVariant|MultilogPeriod) \$~\$~'\
+| sed -E 's~\??(FilterVariant|MultilogPeriod) \$~\$~'\
 > build/logreader56/logreader56.config.tmp
 rm build/logreader56/logreader56.config.php
 mv build/logreader56/logreader56.config.tmp build/logreader56/logreader56.config.php

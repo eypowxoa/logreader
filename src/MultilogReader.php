@@ -16,6 +16,7 @@ final readonly class MultilogReader
     public function readConfigured(
         LogReaderConfig $logReaderConfig,
         MultilogPeriod $multilogPeriod,
+        FilterVariant $filterVariant = FilterVariant::VARIANT_1,
     ): array {
         /** @var Record[] $recordList */
         $recordList = [];
@@ -69,7 +70,7 @@ final readonly class MultilogReader
                 $record = $reader->current();
                 $reader->next();
 
-                if ($filter($record)) {
+                if ($filter($record, $filterVariant)) {
                     $timestampList[$readerNumber] = $record->date->getTimestamp();
                     $currentList[$readerNumber] = $record;
 
@@ -103,7 +104,7 @@ final readonly class MultilogReader
                     $record = $reader->current();
                     $reader->next();
 
-                    if ($filter($record)) {
+                    if ($filter($record, $filterVariant)) {
                         $timestampList[$minimalNumber] = $record->date->getTimestamp();
                         $currentList[$minimalNumber] = $record;
 

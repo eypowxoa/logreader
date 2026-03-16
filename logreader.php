@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use LogReader\CheckedException;
 use LogReader\FileReaderRealFactory;
+use LogReader\FilterVariant;
 use LogReader\LogReaderConfig;
 use LogReader\MultilogPeriod;
 use LogReader\MultilogReader;
@@ -47,6 +48,27 @@ if (($_SERVER['HTTP_AUTHORIZATION'] ?? '') !== $config->httpAuth) {
 /** @var iterable<Record> $recordList */
 $recordList = [];
 
+$period = null;
+
+try {
+    $variant = match ($_GET['v'] ?? '') {
+        '' => FilterVariant::VARIANT_1,
+        '1' => FilterVariant::VARIANT_1,
+        '2' => FilterVariant::VARIANT_2,
+        '3' => FilterVariant::VARIANT_3,
+        '4' => FilterVariant::VARIANT_4,
+        '5' => FilterVariant::VARIANT_5,
+        '6' => FilterVariant::VARIANT_6,
+        '7' => FilterVariant::VARIANT_7,
+        '8' => FilterVariant::VARIANT_8,
+        '9' => FilterVariant::VARIANT_9,
+    };
+} catch (Throwable) {
+    http_response_code(400);
+
+    exit("Wrong variant\n");
+}
+
 if (array_key_exists('p', $_GET)) {
     try {
         $period = match ($_GET['p']) {
@@ -68,6 +90,7 @@ if (array_key_exists('p', $_GET)) {
         foreach ($multilogReader->readConfigured(
             $config,
             $period,
+            $variant,
         ) as $record) {
             $recordList[] = $record;
         }
@@ -77,6 +100,68 @@ if (array_key_exists('p', $_GET)) {
         exit($checkedException->getMessage());
     }
 }
+
+$url = static function (?MultilogPeriod $multilogPeriod, ?FilterVariant $filterVariant): string {
+    $data = [];
+
+    if ($multilogPeriod instanceof MultilogPeriod) {
+        $data['p'] = match ($multilogPeriod) {
+            MultilogPeriod::DAY => 'day',
+            MultilogPeriod::HOUR => 'hour',
+            MultilogPeriod::MINUTE => 'minute',
+            MultilogPeriod::MONTH => 'month',
+            MultilogPeriod::WEEK => 'week',
+        };
+    }
+
+    if ($filterVariant instanceof FilterVariant) {
+        $data['v'] = match ($filterVariant) {
+            FilterVariant::VARIANT_1 => '1',
+            FilterVariant::VARIANT_2 => '2',
+            FilterVariant::VARIANT_3 => '3',
+            FilterVariant::VARIANT_4 => '4',
+            FilterVariant::VARIANT_5 => '5',
+            FilterVariant::VARIANT_6 => '6',
+            FilterVariant::VARIANT_7 => '7',
+            FilterVariant::VARIANT_8 => '8',
+            FilterVariant::VARIANT_9 => '9',
+        };
+    }
+
+    if ([] === $data) {
+        return '';
+    }
+
+    return '?' . http_build_query($data);
+};
+
+$renderPeriod = static function (MultilogPeriod $multilogPeriod, string $label) use ($period, $url, $variant): void {
+    if ($multilogPeriod === $period) {
+        ?>
+        <span class="selected"><?= htmlspecialchars($label); ?></span>
+        <?php
+    } else {
+        ?>
+            <a href="<?= htmlspecialchars($url($multilogPeriod, $variant)); ?>">
+                <?= htmlspecialchars($label); ?>
+            </a>
+        <?php
+    }
+};
+
+$renderVariant = static function (FilterVariant $filterVariant, string $label) use ($period, $url, $variant): void {
+    if ($filterVariant === $variant) {
+        ?>
+        <span class="selected"><?= htmlspecialchars($label); ?></span>
+        <?php
+    } else {
+        ?>
+            <a href="<?= htmlspecialchars($url($period, $filterVariant)); ?>">
+                <?= htmlspecialchars($label); ?>
+            </a>
+        <?php
+    }
+};
 ?>
 <html lang="en">
     <head>
@@ -103,16 +188,29 @@ if (array_key_exists('p', $_GET)) {
             .message {
                 color: #222222;
             }
+            .selected {
+                font-weight: bold;
+            }
         </style>
     </head>
     <body>
         <nav class="period">
-            <a href="?p=minute">Minute</a>
-            <a href="?p=hour">Hour</a>
-            <a href="?p=day">Day</a>
-            <a href="?p=week">Week</a>
-            <a href="?p=month">Month</a>
+            <?php $renderPeriod(MultilogPeriod::MINUTE, 'Minute'); ?>
+            <?php $renderPeriod(MultilogPeriod::HOUR, 'Hour'); ?>
+            <?php $renderPeriod(MultilogPeriod::DAY, 'Day'); ?>
+            <?php $renderPeriod(MultilogPeriod::WEEK, 'Week'); ?>
+            <?php $renderPeriod(MultilogPeriod::MONTH, 'Month'); ?>
         </nav>
+        <nav class="variant">
+            <?php $renderVariant(FilterVariant::VARIANT_1, '1'); ?>
+            <?php $renderVariant(FilterVariant::VARIANT_2, '2'); ?>
+            <?php $renderVariant(FilterVariant::VARIANT_3, '3'); ?>
+            <?php $renderVariant(FilterVariant::VARIANT_4, '4'); ?>
+            <?php $renderVariant(FilterVariant::VARIANT_5, '5'); ?>
+            <?php $renderVariant(FilterVariant::VARIANT_6, '6'); ?>
+            <?php $renderVariant(FilterVariant::VARIANT_7, '7'); ?>
+            <?php $renderVariant(FilterVariant::VARIANT_8, '8'); ?>
+            <?php $renderVariant(FilterVariant::VARIANT_9, '9'); ?>
         <main>
             <ul class="records">
                 <?php foreach ($recordList as $record) { ?>

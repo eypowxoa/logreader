@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use LogReader\FilterVariant;
 use LogReader\LogReaderConfig;
 use LogReader\LogReaderConfigFile;
 use LogReader\Record;
@@ -16,7 +17,13 @@ return new LogReaderConfig(
         new LogReaderConfigFile(
             filePath: 'example.log',
             datePattern: '~\[\S+ (?<month>\S+) (?<day>\d{2}) (?<hour>\d{2}):(?<minute>\d{2}):(?<second>\d{2}) (?<year>\d{4})]~',
-            filterFunction: static fn(Record $record): bool => 1 !== preg_match('~Accepted|Closing~', $record->record),
+            filterFunction: static function (Record $record, FilterVariant $filterVariant): bool {
+                if (FilterVariant::VARIANT_1 !== $filterVariant) {
+                    return 1 === preg_match('~Accepted|Closing~', $record->record);
+                }
+
+                return 1 !== preg_match('~Accepted|Closing~', $record->record);
+            },
         ),
     ],
 );
