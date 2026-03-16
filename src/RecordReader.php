@@ -23,6 +23,7 @@ final class RecordReader
     public function __construct(
         string $datePattern,
         \DateTimeZone $dateTimeZone = new \DateTimeZone('UTC'),
+        private string $source = '',
     ) {
         $this->dateReader = new DateReader($datePattern, $dateTimeZone);
     }
@@ -92,6 +93,7 @@ final class RecordReader
                 $this->position + $recordOffset,
                 $this->offset - $recordOffset,
                 $bodyContent,
+                $this->source,
             );
         }
 

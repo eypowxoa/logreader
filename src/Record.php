@@ -13,6 +13,7 @@ final readonly class Record implements \Stringable
         public int $position,
         public int $length,
         public string $record,
+        public string $source,
     ) {
         $this->border = ($position + $length);
     }

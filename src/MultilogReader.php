@@ -36,6 +36,7 @@ final readonly class MultilogReader
             $recordReader = new RecordReader(
                 $file->datePattern,
                 $logReaderConfig->date->getTimezone(),
+                basename($file->filePath),
             );
 
             $recordSearch = new RecordSearch(

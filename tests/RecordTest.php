@@ -16,17 +16,18 @@ final class RecordTest extends TestCase
     public function testConstruct(): void
     {
         $date = CarbonImmutable::parse('2001-02-03 04:05:06');
-        $record = new Record($date, 7, 8, '9');
+        $record = new Record($date, 7, 8, '9', '10');
         $this->assertSame($date, $record->date);
         $this->assertSame(8, $record->length);
         $this->assertSame(7, $record->position);
         $this->assertSame(15, $record->border);
         $this->assertSame('9', $record->record);
+        $this->assertSame('10', $record->source);
     }
 
     public function testToString(): void
     {
-        $record = new Record(CarbonImmutable::parse('2001-02-03 04:05:06'), 7, 8, '9');
+        $record = new Record(CarbonImmutable::parse('2001-02-03 04:05:06'), 7, 8, '9', '10');
         $this->assertSame('2001-02-03 04:05:06 9', (string) $record);
     }
 }

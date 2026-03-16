@@ -68,4 +68,28 @@ final class MultilogReaderTest extends TestCase
 
         yield 'should find for month' => ['0001-02-01 00:00:04', MultilogPeriod::MONTH, ['e', 'b']];
     }
+
+    public function testReadConfiguredShouldUseBasenameAsRecordSource(): void
+    {
+        $logReaderConfig = new LogReaderConfig(
+            '0001-01-01 00:00:01',
+            'UTC',
+            '',
+            '',
+            2,
+            [
+                new LogReaderConfigFile(
+                    '1/2.txt',
+                    '~(?<second>\d)~',
+                ),
+            ],
+        );
+
+        $fileReaderMemoryFactory = new FileReaderMemoryFactory();
+        $multilogReader = new MultilogReader($fileReaderMemoryFactory);
+
+        $record = $multilogReader->readConfigured($logReaderConfig, MultilogPeriod::MINUTE)[0];
+
+        $this->assertSame('2.txt', $record->source);
+    }
 }

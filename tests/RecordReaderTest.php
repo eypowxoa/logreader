@@ -41,6 +41,7 @@ final class RecordReaderTest extends TestCase
             $this->assertSame($exp[1][1], $record->length);
             $this->assertSame($exp[1][2], (int) $record->date->format('j'));
             $this->assertSame($exp[1][3], $record->record);
+            $this->assertSame('', $record->source);
             $record = $recordReader->readRecord();
         }
 
@@ -81,6 +82,16 @@ final class RecordReaderTest extends TestCase
         yield 'should add buffer position' => ["2 a \n3 b \n4", false, 0, 1, [[5, [1, 5, 2, 'a']], [10, [6, 5, 3, 'b']], [10, null]]];
 
         yield 'should return last if buffer complete' => ["2 a \n3 b \na", true, 0, 1, [[5, [1, 5, 2, 'a']], [11, [6, 6, 3, "b \na"]], [11, null]]];
+    }
+
+    public function testReadRecordShouldCreateRecordWithSourceFromConstructor(): void
+    {
+        $recordReader = new RecordReader('~(?<second>\d+)~', new \DateTimeZone('UTC'), 'source');
+        $recordReader->setBuffer('1', true);
+
+        $record = $recordReader->readRecord();
+
+        $this->assertSame('source', $record->source);
     }
 
     public function testReadRecordShouldUseTimezone(): void

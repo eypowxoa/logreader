@@ -90,6 +90,10 @@ if (array_key_exists('p', $_GET)) {
             .record {
                 padding: 5px 0;
             }
+            .source {
+                color: #227799;
+                font-weight: bold;
+            }
             .date {
                 color: #552222;
                 font-weight: bold;
@@ -111,6 +115,7 @@ if (array_key_exists('p', $_GET)) {
             <ul class="records">
                 <?php foreach ($recordList as $record) { ?>
                     <li class="record">
+                        <span class="source"><?= htmlspecialchars($record->source); ?></span>
                         <span class="date"><?= htmlspecialchars($record->date->format('Y-m-d H:i:s')); ?></span>
                         <span class="message"><?=  htmlspecialchars($record->record); ?></span>
                     </li>
