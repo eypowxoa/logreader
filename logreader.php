@@ -49,13 +49,12 @@ $recordList = [];
 
 if (array_key_exists('p', $_GET)) {
     try {
-        $period = match ($_GET['p'] ?? null) {
+        $period = match ($_GET['p']) {
             'minute' => MultilogPeriod::MINUTE,
             'hour' => MultilogPeriod::HOUR,
             'day' => MultilogPeriod::DAY,
             'week' => MultilogPeriod::WEEK,
             'month' => MultilogPeriod::MONTH,
-            default => throw new RuntimeException('Wrong period'),
         };
     } catch (Throwable) {
         http_response_code(400);
