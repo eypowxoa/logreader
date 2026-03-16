@@ -13,8 +13,10 @@ final readonly class MultilogReader
     /**
      * @return Record[]
      */
-    public function readConfigured(LogReaderConfig $logReaderConfig, MultilogPeriod $multilogPeriod): iterable
-    {
+    public function readConfigured(
+        LogReaderConfig $logReaderConfig,
+        MultilogPeriod $multilogPeriod,
+    ): iterable {
         /** @var Record[] $recordList */
         $recordList = [];
 
