@@ -87,7 +87,12 @@ final class RecordReader
             $bodyLength = ($this->offset - $dateOffset);
             $bodyContent = mb_substr($this->buffer, $dateOffset, $bodyLength, self::BYTE_ENCODING) |> \trim(...);
 
-            return new Record($recordDate, $this->position + $recordOffset, $this->offset - $recordOffset, $bodyContent);
+            return new Record(
+                $recordDate,
+                $this->position + $recordOffset,
+                $this->offset - $recordOffset,
+                $bodyContent,
+            );
         }
 
         return null;

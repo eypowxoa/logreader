@@ -32,9 +32,24 @@ final readonly class MultilogReader
 
         foreach ($logReaderConfig->files as $file) {
             $fileReader = $this->fileReaderFactory->createFileReader($file->filePath);
-            $recordReader = new RecordReader($file->datePattern, $logReaderConfig->date->getTimezone());
-            $recordSearch = new RecordSearch($fileReader, $recordReader, self::BUFFER_SIZE);
-            $reader = new LogReader($fileReader, $recordReader, $recordSearch, self::BUFFER_SIZE);
+
+            $recordReader = new RecordReader(
+                $file->datePattern,
+                $logReaderConfig->date->getTimezone(),
+            );
+
+            $recordSearch = new RecordSearch(
+                $fileReader,
+                $recordReader,
+                self::BUFFER_SIZE,
+            );
+
+            $reader = new LogReader(
+                $fileReader,
+                $recordReader,
+                $recordSearch,
+                self::BUFFER_SIZE,
+            );
 
             $readerList[] = $reader->readLog($since, $until);
             $filterList[] = $file->filterFunction;
