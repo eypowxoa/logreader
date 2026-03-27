@@ -5,6 +5,7 @@ declare(strict_types=1);
 use LogReader\FilterVariant;
 use LogReader\LogReaderConfig;
 use LogReader\LogReaderConfigFile;
+use LogReader\MultilogPeriod;
 use LogReader\Record;
 
 return new LogReaderConfig(
@@ -26,4 +27,12 @@ return new LogReaderConfig(
             },
         ),
     ],
+    periodList: [
+        MultilogPeriod::HOUR,
+        MultilogPeriod::DAY,
+    ], // optional
+    variantList: [
+        FilterVariant::VARIANT_1,
+        FilterVariant::VARIANT_2,
+    ], // optional
 );

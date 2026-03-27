@@ -195,22 +195,50 @@ $renderVariant = static function (FilterVariant $filterVariant, string $label) u
     </head>
     <body>
         <nav class="period">
-            <?php $renderPeriod(MultilogPeriod::MINUTE, 'Minute'); ?>
-            <?php $renderPeriod(MultilogPeriod::HOUR, 'Hour'); ?>
-            <?php $renderPeriod(MultilogPeriod::DAY, 'Day'); ?>
-            <?php $renderPeriod(MultilogPeriod::WEEK, 'Week'); ?>
-            <?php $renderPeriod(MultilogPeriod::MONTH, 'Month'); ?>
+            <?php if ($config->hasPeriod(MultilogPeriod::MINUTE)) {
+                $renderPeriod(MultilogPeriod::MINUTE, 'Minute');
+            } ?>
+            <?php if ($config->hasPeriod(MultilogPeriod::HOUR)) {
+                $renderPeriod(MultilogPeriod::HOUR, 'Hour');
+            } ?>
+            <?php if ($config->hasPeriod(MultilogPeriod::DAY)) {
+                $renderPeriod(MultilogPeriod::DAY, 'Day');
+            } ?>
+            <?php if ($config->hasPeriod(MultilogPeriod::WEEK)) {
+                $renderPeriod(MultilogPeriod::WEEK, 'Week');
+            } ?>
+            <?php if ($config->hasPeriod(MultilogPeriod::MONTH)) {
+                $renderPeriod(MultilogPeriod::MONTH, 'Month');
+            } ?>
         </nav>
         <nav class="variant">
-            <?php $renderVariant(FilterVariant::VARIANT_1, '1'); ?>
-            <?php $renderVariant(FilterVariant::VARIANT_2, '2'); ?>
-            <?php $renderVariant(FilterVariant::VARIANT_3, '3'); ?>
-            <?php $renderVariant(FilterVariant::VARIANT_4, '4'); ?>
-            <?php $renderVariant(FilterVariant::VARIANT_5, '5'); ?>
-            <?php $renderVariant(FilterVariant::VARIANT_6, '6'); ?>
-            <?php $renderVariant(FilterVariant::VARIANT_7, '7'); ?>
-            <?php $renderVariant(FilterVariant::VARIANT_8, '8'); ?>
-            <?php $renderVariant(FilterVariant::VARIANT_9, '9'); ?>
+            <?php if ($config->hasVariant(FilterVariant::VARIANT_1)) {
+                $renderVariant(FilterVariant::VARIANT_1, '1');
+            } ?>
+            <?php if ($config->hasVariant(FilterVariant::VARIANT_2)) {
+                $renderVariant(FilterVariant::VARIANT_2, '2');
+            } ?>
+            <?php if ($config->hasVariant(FilterVariant::VARIANT_3)) {
+                $renderVariant(FilterVariant::VARIANT_3, '3');
+            } ?>
+            <?php if ($config->hasVariant(FilterVariant::VARIANT_4)) {
+                $renderVariant(FilterVariant::VARIANT_4, '4');
+            } ?>
+            <?php if ($config->hasVariant(FilterVariant::VARIANT_5)) {
+                $renderVariant(FilterVariant::VARIANT_5, '5');
+            } ?>
+            <?php if ($config->hasVariant(FilterVariant::VARIANT_6)) {
+                $renderVariant(FilterVariant::VARIANT_6, '6');
+            } ?>
+            <?php if ($config->hasVariant(FilterVariant::VARIANT_7)) {
+                $renderVariant(FilterVariant::VARIANT_7, '7');
+            } ?>
+            <?php if ($config->hasVariant(FilterVariant::VARIANT_8)) {
+                $renderVariant(FilterVariant::VARIANT_8, '8');
+            } ?>
+            <?php if ($config->hasVariant(FilterVariant::VARIANT_9)) {
+                $renderVariant(FilterVariant::VARIANT_9, '9');
+            } ?>
         <main>
             <ul class="records">
                 <?php foreach ($recordList as $record) { ?>

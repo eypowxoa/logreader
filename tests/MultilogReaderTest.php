@@ -6,9 +6,11 @@ namespace LogReaderTests;
 
 use LogReader\FileReaderMemoryFactory;
 use LogReader\FilterVariant;
+use LogReader\FilterVariantWrongException;
 use LogReader\LogReaderConfig;
 use LogReader\LogReaderConfigFile;
 use LogReader\MultilogPeriod;
+use LogReader\MultilogPeriodWrongException;
 use LogReader\MultilogReader;
 use LogReader\Record;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -74,6 +76,74 @@ final class MultilogReaderTest extends TestCase
         yield 'should find for month' => ['0001-02-01 00:00:04', MultilogPeriod::MONTH, ['e', 'b']];
     }
 
+    public function testReadConfiguredShouldFailIfNotConfiguredPeriod(): void
+    {
+        $logReaderConfig = new LogReaderConfig(
+            '0001-01-01 00:01:04',
+            'UTC',
+            '',
+            '',
+            2,
+            [
+                new LogReaderConfigFile(
+                    "3a\n5b\n7c\n",
+                    '~(?<second>\d)~',
+                ),
+                new LogReaderConfigFile(
+                    "2d\n4e\n6f\n",
+                    '~(?<second>\d)~',
+                ),
+            ],
+            periodList: [
+                MultilogPeriod::DAY,
+                MultilogPeriod::MONTH,
+            ]
+        );
+
+        $fileReaderMemoryFactory = new FileReaderMemoryFactory();
+        $multilogReader = new MultilogReader($fileReaderMemoryFactory);
+
+        $this->expectException(MultilogPeriodWrongException::class);
+        $this->expectExceptionMessage('got WEEK');
+        $this->expectExceptionMessage('expected DAY, MONTH');
+
+        $multilogReader->readConfigured($logReaderConfig, MultilogPeriod::WEEK);
+    }
+
+    public function testReadConfiguredShouldFailIfNotConfiguredVariant(): void
+    {
+        $logReaderConfig = new LogReaderConfig(
+            '0001-01-01 00:01:04',
+            'UTC',
+            '',
+            '',
+            2,
+            [
+                new LogReaderConfigFile(
+                    "3a\n5b\n7c\n",
+                    '~(?<second>\d)~',
+                ),
+                new LogReaderConfigFile(
+                    "2d\n4e\n6f\n",
+                    '~(?<second>\d)~',
+                ),
+            ],
+            variantList: [
+                FilterVariant::VARIANT_1,
+                FilterVariant::VARIANT_3,
+            ]
+        );
+
+        $fileReaderMemoryFactory = new FileReaderMemoryFactory();
+        $multilogReader = new MultilogReader($fileReaderMemoryFactory);
+
+        $this->expectException(FilterVariantWrongException::class);
+        $this->expectExceptionMessage('got VARIANT_2');
+        $this->expectExceptionMessage('expected VARIANT_1, VARIANT_3');
+
+        $multilogReader->readConfigured($logReaderConfig, MultilogPeriod::DAY, FilterVariant::VARIANT_2);
+    }
+
     public function testReadConfiguredShouldPassVariantNumberToFilterFunction(): void
     {
         /** @var FilterVariant[] $passedVariants */
@@ -96,6 +166,7 @@ final class MultilogReaderTest extends TestCase
                     },
                 ),
             ],
+            variantList: [FilterVariant::VARIANT_1, FilterVariant::VARIANT_2],
         );
 
         $fileReaderMemoryFactory = new FileReaderMemoryFactory();

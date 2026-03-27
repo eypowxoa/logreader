@@ -18,6 +18,28 @@ final readonly class MultilogReader
         MultilogPeriod $multilogPeriod,
         FilterVariant $filterVariant = FilterVariant::VARIANT_1,
     ): array {
+        if (! $logReaderConfig->hasPeriod($multilogPeriod)) {
+            throw new MultilogPeriodWrongException(\sprintf(
+                'Not configured period, got %s, expected %s',
+                $multilogPeriod->name,
+                implode(', ', array_map(
+                    static fn(MultilogPeriod $multilogPeriod): string => $multilogPeriod->name,
+                    $logReaderConfig->periodList,
+                )),
+            ));
+        }
+
+        if (! $logReaderConfig->hasVariant($filterVariant)) {
+            throw new FilterVariantWrongException(\sprintf(
+                'Not configured variant, got %s, expected %s',
+                $filterVariant->name,
+                implode(', ', array_map(
+                    static fn(FilterVariant $filterVariant): string => $filterVariant->name,
+                    $logReaderConfig->variantList,
+                )),
+            ));
+        }
+
         /** @var Record[] $recordList */
         $recordList = [];
 
