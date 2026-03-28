@@ -2,6 +2,13 @@
 
 Web page for viewing a short period of a big log files.
 
+<img
+    width="902"
+    height="494"
+    alt="Screenshot of the Log Reader web page"
+    src="logreader-1-2-0-screenshot.png"
+/>
+
 # Usage for PHP 5.6
 
 Build `logreader56.tar.gz` for PHP 5.6
