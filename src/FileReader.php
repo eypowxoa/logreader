@@ -24,6 +24,18 @@ abstract class FileReader
         fclose($handle);
     }
 
+    #[\NoDiscard()]
+    public function isReadable(): bool
+    {
+        try {
+            $this->open();
+
+            return true;
+        } catch (FileNotReadableException) {
+            return false;
+        }
+    }
+
     /**
      * @throws FileNotReadableException
      */

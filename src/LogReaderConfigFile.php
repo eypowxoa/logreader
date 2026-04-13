@@ -12,6 +12,7 @@ final readonly class LogReaderConfigFile
         public string $filePath,
         public string $datePattern,
         ?\Closure $filterFunction = null,
+        public bool $checkAccess = false,
     ) {
         if ('' === $filePath) {
             throw new \InvalidArgumentException('Empty filePath parameter');

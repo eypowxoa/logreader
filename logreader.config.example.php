@@ -25,6 +25,7 @@ return new LogReaderConfig(
 
                 return 1 !== preg_match('~Accepted|Closing~', $record->record);
             },
+            checkAccess: true,
         ),
     ],
     periodList: [

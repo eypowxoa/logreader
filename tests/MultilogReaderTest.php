@@ -184,6 +184,44 @@ final class MultilogReaderTest extends TestCase
         $this->assertSame([FilterVariant::VARIANT_2, FilterVariant::VARIANT_2], $passedVariants);
     }
 
+    public function testReadConfiguredShouldSkipNotReadableIfCheckAccessEnabled(): void
+    {
+        $logReaderConfig = new LogReaderConfig(
+            '0001-01-01 00:00:01',
+            'UTC',
+            '',
+            '',
+            2,
+            [
+                new LogReaderConfigFile(
+                    '1/readable.txt',
+                    '~(?<second>\d)~',
+                ),
+                new LogReaderConfigFile(
+                    '1/unreadable.txt',
+                    '~(?<second>\d)~',
+                    checkAccess: true,
+                ),
+            ],
+        );
+
+        $fileReaderMemoryFactory = new FileReaderMemoryFactory();
+        $fileReaderMemoryFactory->unreadable[] = '1/unreadable.txt';
+        $multilogReader = new MultilogReader($fileReaderMemoryFactory);
+
+        $recordList = $multilogReader->readConfigured(
+            $logReaderConfig,
+            MultilogPeriod::MINUTE,
+        );
+
+        $this->assertCount(1, $recordList);
+        $this->assertArrayHasKey(0, $recordList);
+
+        $record = $recordList[0];
+
+        $this->assertSame('readable.txt', $record->source);
+    }
+
     public function testReadConfiguredShouldUseBasenameAsRecordSource(): void
     {
         $logReaderConfig = new LogReaderConfig(

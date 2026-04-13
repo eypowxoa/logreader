@@ -19,6 +19,18 @@ final class FileReaderMemoryTest extends TestCase
         $this->assertSame(md5('<?php echo "OK\n";'), $fileReaderMemory->path);
     }
 
+    public function testIsReadableShouldReturnFalseIfNotReadable(): void
+    {
+        $fileReaderMemory = new FileReaderMemory('', true);
+        $this->assertFalse($fileReaderMemory->isReadable());
+    }
+
+    public function testIsReadableShouldReturnTrueIfReadable(): void
+    {
+        $fileReaderMemory = new FileReaderMemory('');
+        $this->assertTrue($fileReaderMemory->isReadable());
+    }
+
     public function testReadCounterShouldBeZeroAtStart(): void
     {
         $fileReaderMemory = new FileReaderMemory('<?php echo "OK\n";');

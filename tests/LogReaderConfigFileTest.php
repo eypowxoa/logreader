@@ -37,10 +37,22 @@ final class LogReaderConfigFileTest extends TestCase
         $this->assertSame(' ', $logReaderConfigFile->filePath);
     }
 
+    public function testConstructShouldSetCheckAccess(): void
+    {
+        $logReaderConfigFile = new LogReaderConfigFile('a', 'b', null, true);
+        $this->assertTrue($logReaderConfigFile->checkAccess);
+    }
+
     public function testConstructShouldSetDatePattern(): void
     {
         $logReaderConfigFile = new LogReaderConfigFile('a', 'b');
         $this->assertSame('b', $logReaderConfigFile->datePattern);
+    }
+
+    public function testConstructShouldSetDefaultCheckAccess(): void
+    {
+        $logReaderConfigFile = new LogReaderConfigFile('a', 'b');
+        $this->assertFalse($logReaderConfigFile->checkAccess);
     }
 
     public function testConstructShouldSetDefaultFilterFunction(): void

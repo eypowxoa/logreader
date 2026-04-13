@@ -19,6 +19,18 @@ final class FileReaderRealTest extends TestCase
         $this->assertSame(__FILE__, $fileReaderReal->path);
     }
 
+    public function testIsReadableShouldReturnFalseIfNotReadable(): void
+    {
+        $fileReaderReal = new FileReaderReal(__FILE__ . '.wrong');
+        $this->assertFalse($fileReaderReal->isReadable());
+    }
+
+    public function testIsReadableShouldReturnTrueIfReadable(): void
+    {
+        $fileReaderReal = new FileReaderReal(__FILE__);
+        $this->assertTrue($fileReaderReal->isReadable());
+    }
+
     public function testReadCounterShouldBeZeroAtStart(): void
     {
         $fileReaderReal = new FileReaderReal(__FILE__);

@@ -58,6 +58,10 @@ final readonly class MultilogReader
         foreach ($logReaderConfig->files as $file) {
             $fileReader = $this->fileReaderFactory->createFileReader($file->filePath);
 
+            if ($file->checkAccess && !$fileReader->isReadable()) {
+                continue;
+            }
+
             $recordReader = new RecordReader(
                 $file->datePattern,
                 $logReaderConfig->date->getTimezone(),
