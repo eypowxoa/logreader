@@ -110,7 +110,7 @@ abstract class FileReader
      *
      * @throws FileNotReadableException
      */
-    abstract protected function internalOpen();
+    abstract protected function internalOpen(): mixed;
 
     /**
      * @throws FileNotReadableException
@@ -131,7 +131,7 @@ abstract class FileReader
      *
      * @throws FileNotReadableException
      */
-    private function open()
+    private function open(): mixed
     {
         $handle = $this->handle;
 

@@ -16,12 +16,14 @@
         "ergebnis/composer-normalize": "^2.49",
         "friendsofphp/php-cs-fixer": "^3.93",
         "nesbot/carbon": "^3.11",
+        "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-strict-rules": "^2.0",
         "phpunit/phpunit": "^12.5",
         "rector/rector": "^2.3",
         "roave/security-advisories": "dev-latest",
-        "shipmonk/composer-dependency-analyser": "^1.8"
+        "shipmonk/composer-dependency-analyser": "^1.8",
+        "tomasvotruba/type-coverage": "^2.1"
     },
     "autoload": {
         "psr-4": {
@@ -37,7 +39,8 @@
         "allow-plugins": {
             "captainhook/captainhook-phar": true,
             "cweagans/composer-patches": true,
-            "ergebnis/composer-normalize": true
+            "ergebnis/composer-normalize": true,
+            "phpstan/extension-installer": true
         },
         "sort-packages": true
     },

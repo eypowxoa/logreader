@@ -11,7 +11,7 @@ final class FileReaderReal extends FileReader
      *
      * @throws FileNotReadableException
      */
-    protected function internalOpen()
+    protected function internalOpen(): mixed
     {
         $handle = @fopen($this->path, 'r');
 

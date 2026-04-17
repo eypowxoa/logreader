@@ -18,7 +18,7 @@ final class FileReaderMemory extends FileReader
      *
      * @throws FileNotReadableException
      */
-    protected function internalOpen()
+    protected function internalOpen(): mixed
     {
         if ($this->unreadable) {
             throw new FileNotReadableException($this->path);

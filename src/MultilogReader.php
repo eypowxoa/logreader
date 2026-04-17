@@ -40,6 +40,9 @@ final readonly class MultilogReader
             ));
         }
 
+        /** @var (null|Record)[] $currentList */
+        $currentList = [];
+
         /** @var Record[] $recordList */
         $recordList = [];
 
